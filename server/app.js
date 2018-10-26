@@ -31,7 +31,7 @@ let redisPASS;
 
 if (process.env.REDISCLOUD_URL) {
   redisURL = url.parse(process.env.REDISCLOUD_URL);
-  redisPASS = redisURL.auth.split(';')[1];
+  redisPASS = redisURL.auth.split(':')[1];
 }
 
 const router = require('./router.js');
