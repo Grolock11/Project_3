@@ -23,6 +23,7 @@ const makeDomo = (req, res) => {
     name: req.body.name,
     age: req.body.age,
     owner: req.session.account._id,
+    level: req.body.level,
   };
 
   const newDomo = new Domo.DomoModel(domoData);
@@ -53,11 +54,29 @@ const getDomos = (request, response) => {
       return res.status(400).json({ error: 'An error occured' });
     }
 
-    return res.json({ domos: docs });
+    return res.json({ csrfToken: req.csrfToken(), domos: docs });
   });
+};
+
+const deleteDomo = (request, response) => {
+  console.log('made it into deleteDomo');
+
+  const req = request;
+  const res = response;
+
+  Domo.DomoModel.remove({name: req.body.domoName}, (err) => {
+    console.dir(err);
+    if(err) {
+      return res.status(400).json({ error: 'An error occured while deleting the domo'});
+    }
+    return res.status(200).json({success: 'success'});
+  });
+
+  return res.status(200).json({success: 'success'});
 };
 
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
+module.exports.deleteDomo = deleteDomo;
 module.exports.make = makeDomo;
 
