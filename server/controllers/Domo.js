@@ -71,8 +71,6 @@ const deleteDomo = (request, response) => {
     }
     return res.status(200).json({success: 'success'});
   });
-
-  return res.status(200).json({success: 'success'});
 };
 
 module.exports.makerPage = makerPage;
