@@ -28,7 +28,7 @@ module.exports = {
   requiresLogout,
 };
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'prodeuction') {
   module.exports.requiresSecure = requiresSecure;
 } else {
   module.exports.requiresSecure = bypassSecure;
