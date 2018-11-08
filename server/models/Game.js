@@ -2,29 +2,24 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const _ = require('underscore');
 
-// keeping this file around for reference
-
-let DomoModel = {};
+let GameModel = {};
 
 const convertId = mongoose.Types.ObjectId;
 const setName = (name) => _.escape(name).trim();
 
-const DomoSchema = new mongoose.Schema({
+const GameSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
     trim: true,
     set: setName,
   },
-  age: {
-    type: Number,
-    min: 0,
+  status: {
+    type: String,
     required: true,
   },
-  level: {
-    type: Number,
-    min: 1,
-    required: true,
+  progress: {
+    type: String,
   },
   owner: {
     type: mongoose.Schema.ObjectId,
@@ -37,23 +32,23 @@ const DomoSchema = new mongoose.Schema({
   },
 });
 
-DomoSchema.statics.toAPI = (doc) => ({
+GameSchema.statics.toAPI = (doc) => ({
   name: doc.name,
-  age: doc.age,
-  level: doc.level,
+  status: doc.status,
+  progress: doc.progress,
 });
 
-DomoSchema.statics.findByOwner = (ownerId, callback) => {
+GameSchema.statics.findByOwner = (ownerId, callback) => {
   const search = {
     owner: convertId(ownerId),
   };
 
-  return DomoModel.find(search).select('name age level').exec(callback);
+  return GameModel.find(search).select('name status progress').exec(callback);
 };
 
-DomoModel = mongoose.model('Domo', DomoSchema);
+GameModel = mongoose.model('Game', GameSchema);
 
 module.exports = {
-  DomoModel,
-  DomoSchema,
+  GameModel,
+  GameSchema,
 };

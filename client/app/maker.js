@@ -2,13 +2,13 @@ const handleDomo = (e) => {
   e.preventDefault();
   $('#domoMessage').animate({width:'hide'}, 350);
 
-  if($('#domoName').val() == '' || $('#domoAge').val() == '' || $('#domoLevel').val() == '') {
+  if($('#gameName').val() == '' || $('#status').val() == '') {
     handleError('RAWR! All fields are required');
     return false;
   }
 
-  sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), () => {
-    loadDomosFromServer();
+  sendAjax('POST', $('#gameForm').attr('action'), $('#gameForm').serialize(), () => {
+    loadGamesFromServer();
   });
 
   return false;
@@ -18,81 +18,88 @@ const handleDomo = (e) => {
 const deleteDomo = (e, name) => {
   e.preventDefault();
 
-  sendAjax('DELETE', '/maker', $(`.${name}`).serialize(), () => {
-    loadDomosFromServer();
+  sendAjax('DELETE', '/game', $(`.${name}`).serialize(), () => {
+    loadGamesFromServer();
   });
 
   return false;
 }
 
-const DomoForm = (props) => {
+//using a comment attribute temporarily in react to store comments inline
+const GameForm = (props) => {
   return (
-    <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="maker" method="POST" className="domoForm" >
-      <label htmlFor="name">Name: </label>
-      <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-      <label htmlFor="age">Age: </label>
-      <input id="domoAge" type="text" name="age" placeholder="Domo Age" />
-      <label htmlFor="level">Level: </label>
-      <input id="domoLevel" type="text" name="level" placeholder="Domo Level" />
+    <form id="gameForm" onSubmit={handleDomo} name="gameForm" action="maker" method="POST" className="gameForm" >
+      <label htmlFor="gameName">Game: </label>
+      <input id="gameName" type="text" name="name" placeholder="Domo Name" />
+      <label htmlFor="progress">Progress: </label>
+      <input id="progress" type="text" name="progress" placeholder="Current Progress" comment="Will likely be hidden and appear if 'in progress' is selected form the status drop down" />
+      <label htmlFor="gameStatus">Status: </label>
+      <input id="gameStatus" type="text" name="status" placeholder="Current Status" comment="make a dropdown with options Completed, in progress, planned, possibly others." />
       <input id='csrf' type="hidden" name="_csrf" value={props.csrf} />
-      <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+      <input className="gameSubmit" type="submit" value="Submit" comment='class was domoMakerSubmit for css' />
     </form>
   );
 };
 
-const DomoList = (props) => {
-  if(props.domos.length === 0) {
+
+//Edit button has no functionality behind it yet
+const GameList = (props) => {
+  if(props.games.length === 0) {
     return (
-      <div className="domoList">
-        <h3 className="emptyDomo">No Domos yet</h3>
+      <div className="gameList">
+        <h3 className="emptyGame">No Entries yet, add one!</h3>
       </div>
     );
   };
 
-  const domoNodes = props.domos.map(function(domo) {
+  const gameNodes = props.games.map(function(game) {
     return (
-      <div key={domo._id} className="domo">
-        <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-        <h3 className="domoName"> Name: {domo.name} </h3>
-        <h3 className="domoAge"> Age: {domo.age} </h3>
-        <h3 className="domoLevel"> Level: {domo.level} </h3>
-        <form className={domo.name} onSubmit={(e) => deleteDomo(e, domo.name)} >
-          <input className="deleteDomo" type='submit' value='Delete'/>
+      <div key={game._id} className="game">
+        <h3 className="gameName"> Name: {game.name} </h3>
+        <h3 className="gameStatus"> Status: {game.status} </h3>
+        <h3 className="gameProgress" comment="Should only appear if status is in progress"> Progress: {game.progress} </h3>
+        <form className={game.name} onSubmit={(e) => deleteDomo(e, game.name)} >
+          <input className="deleteGame" type='submit' value='Delete'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
-          <input type="hidden" name="domoName" value={domo.name} />
+          <input type="hidden" name="domoName" value={game.name} />
+        </form>
+        <form className={game.name} onSubmit={(e) => deleteDomo(e, game.name)} >
+          <input className="editGame" type='submit' value='Edit'/>
+          <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
+          <input type="hidden" name="domoName" value={game.name} />
         </form>
       </div>
     );
   });
 
   return (
-    <div className="domoList">
-      {domoNodes}
+    <div className="gameList">
+      {gameNodes}
     </div>
   );
 };
 
-const loadDomosFromServer = () => {
-  sendAjax('GET', '/getDomos', null, (data) => {
+const loadGamesFromServer = () => {
+  sendAjax('GET', '/getGames', null, (data) => {
     ReactDOM.render(
-      <DomoList domos={data.domos} csrf={csrf} />,
-      document.querySelector('#domos')
+      <GameList games={data.games} csrf={csrf} />,
+      document.querySelector('#games')
     );
   });
 };
 
 const setup = function(csrf) {
   ReactDOM.render(
-    <DomoForm csrf={csrf} />,
-    document.querySelector('#makeDomo')
+    <GameForm csrf={csrf} />,
+    document.querySelector('#addGame')
   );
 
   ReactDOM.render(
-    <DomoList domos={[]} />,
-    document.querySelector('#domos')
+    <GameList games={[]} />,
+    document.querySelector('#games')
   );
 
-  loadDomosFromServer();
+  loadGamesFromServer();
 };
 
 const getToken = () => {

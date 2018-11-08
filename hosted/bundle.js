@@ -4,13 +4,13 @@ var handleDomo = function handleDomo(e) {
   e.preventDefault();
   $('#domoMessage').animate({ width: 'hide' }, 350);
 
-  if ($('#domoName').val() == '' || $('#domoAge').val() == '' || $('#domoLevel').val() == '') {
+  if ($('#gameName').val() == '' || $('#status').val() == '') {
     handleError('RAWR! All fields are required');
     return false;
   }
 
-  sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('POST', $('#gameForm').attr('action'), $('#gameForm').serialize(), function () {
+    loadGamesFromServer();
   });
 
   return false;
@@ -20,110 +20,120 @@ var handleDomo = function handleDomo(e) {
 var deleteDomo = function deleteDomo(e, name) {
   e.preventDefault();
 
-  sendAjax('DELETE', '/maker', $('.' + name).serialize(), function () {
-    loadDomosFromServer();
+  sendAjax('DELETE', '/game', $('.' + name).serialize(), function () {
+    loadGamesFromServer();
   });
 
   return false;
 };
 
-var DomoForm = function DomoForm(props) {
+//using a comment attribute temporarily in react to store comments inline
+var GameForm = function GameForm(props) {
   return React.createElement(
     'form',
-    { id: 'domoForm', onSubmit: handleDomo, name: 'domoForm', action: 'maker', method: 'POST', className: 'domoForm' },
+    { id: 'gameForm', onSubmit: handleDomo, name: 'gameForm', action: 'maker', method: 'POST', className: 'gameForm' },
     React.createElement(
       'label',
-      { htmlFor: 'name' },
-      'Name: '
+      { htmlFor: 'gameName' },
+      'Game: '
     ),
-    React.createElement('input', { id: 'domoName', type: 'text', name: 'name', placeholder: 'Domo Name' }),
+    React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Domo Name' }),
     React.createElement(
       'label',
-      { htmlFor: 'age' },
-      'Age: '
+      { htmlFor: 'progress' },
+      'Progress: '
     ),
-    React.createElement('input', { id: 'domoAge', type: 'text', name: 'age', placeholder: 'Domo Age' }),
+    React.createElement('input', { id: 'progress', type: 'text', name: 'progress', placeholder: 'Current Progress', comment: 'Will likely be hidden and appear if \'in progress\' is selected form the status drop down' }),
     React.createElement(
       'label',
-      { htmlFor: 'level' },
-      'Level: '
+      { htmlFor: 'gameStatus' },
+      'Status: '
     ),
-    React.createElement('input', { id: 'domoLevel', type: 'text', name: 'level', placeholder: 'Domo Level' }),
+    React.createElement('input', { id: 'gameStatus', type: 'text', name: 'status', placeholder: 'Current Status', comment: 'make a dropdown with options Completed, in progress, planned, possibly others.' }),
     React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: props.csrf }),
-    React.createElement('input', { className: 'makeDomoSubmit', type: 'submit', value: 'Make Domo' })
+    React.createElement('input', { className: 'gameSubmit', type: 'submit', value: 'Submit', comment: 'class was domoMakerSubmit for css' })
   );
 };
 
-var DomoList = function DomoList(props) {
-  if (props.domos.length === 0) {
+//Edit button has no functionality behind it yet
+var GameList = function GameList(props) {
+  if (props.games.length === 0) {
     return React.createElement(
       'div',
-      { className: 'domoList' },
+      { className: 'gameList' },
       React.createElement(
         'h3',
-        { className: 'emptyDomo' },
-        'No Domos yet'
+        { className: 'emptyGame' },
+        'No Entries yet, add one!'
       )
     );
   };
 
-  var domoNodes = props.domos.map(function (domo) {
+  var gameNodes = props.games.map(function (game) {
     return React.createElement(
       'div',
-      { key: domo._id, className: 'domo' },
-      React.createElement('img', { src: '/assets/img/domoface.jpeg', alt: 'domo face', className: 'domoFace' }),
+      { key: game._id, className: 'game' },
       React.createElement(
         'h3',
-        { className: 'domoName' },
+        { className: 'gameName' },
         ' Name: ',
-        domo.name,
+        game.name,
         ' '
       ),
       React.createElement(
         'h3',
-        { className: 'domoAge' },
-        ' Age: ',
-        domo.age,
+        { className: 'gameStatus' },
+        ' Status: ',
+        game.status,
         ' '
       ),
       React.createElement(
         'h3',
-        { className: 'domoLevel' },
-        ' Level: ',
-        domo.level,
+        { className: 'gameProgress', comment: 'Should only appear if status is in progress' },
+        ' Progress: ',
+        game.progress,
         ' '
       ),
       React.createElement(
         'form',
-        { className: domo.name, onSubmit: function onSubmit(e) {
-            return deleteDomo(e, domo.name);
+        { className: game.name, onSubmit: function onSubmit(e) {
+            return deleteDomo(e, game.name);
           } },
-        React.createElement('input', { className: 'deleteDomo', type: 'submit', value: 'Delete' }),
+        React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
         React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
-        React.createElement('input', { type: 'hidden', name: 'domoName', value: domo.name })
+        React.createElement('input', { type: 'hidden', name: 'domoName', value: game.name })
+      ),
+      React.createElement(
+        'form',
+        { className: game.name, onSubmit: function onSubmit(e) {
+            return deleteDomo(e, game.name);
+          } },
+        React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
+        React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
+        React.createElement('input', { type: 'hidden', name: 'domoName', value: game.name })
       )
     );
   });
 
   return React.createElement(
     'div',
-    { className: 'domoList' },
-    domoNodes
+    { className: 'gameList' },
+    gameNodes
   );
 };
 
-var loadDomosFromServer = function loadDomosFromServer() {
-  sendAjax('GET', '/getDomos', null, function (data) {
-    ReactDOM.render(React.createElement(DomoList, { domos: data.domos, csrf: csrf }), document.querySelector('#domos'));
+var loadGamesFromServer = function loadGamesFromServer() {
+  sendAjax('GET', '/getGames', null, function (data) {
+    ReactDOM.render(React.createElement(GameList, { games: data.games, csrf: csrf }), document.querySelector('#games'));
   });
 };
 
 var setup = function setup(csrf) {
-  ReactDOM.render(React.createElement(DomoForm, { csrf: csrf }), document.querySelector('#makeDomo'));
+  ReactDOM.render(React.createElement(GameForm, { csrf: csrf }), document.querySelector('#addGame'));
 
-  ReactDOM.render(React.createElement(DomoList, { domos: [] }), document.querySelector('#domos'));
+  ReactDOM.render(React.createElement(GameList, { games: [] }), document.querySelector('#games'));
 
-  loadDomosFromServer();
+  loadGamesFromServer();
 };
 
 var getToken = function getToken() {

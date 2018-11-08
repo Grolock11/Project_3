@@ -1,5 +1,7 @@
 const models = require('../models');
 
+// keeping this file around fo reference
+
 const Domo = models.Domo;
 
 const makerPage = (req, res) => {
@@ -64,12 +66,12 @@ const deleteDomo = (request, response) => {
   const req = request;
   const res = response;
 
-  Domo.DomoModel.remove({name: req.body.domoName}, (err) => {
+  Domo.DomoModel.remove({ name: req.body.domoName }, (err) => {
     console.dir(err);
-    if(err) {
-      return res.status(400).json({ error: 'An error occured while deleting the domo'});
+    if (err) {
+      return res.status(400).json({ error: 'An error occured while deleting the domo' });
     }
-    return res.status(200).json({success: 'success'});
+    return res.status(200).json({ success: 'success' });
   });
 };
 

@@ -47,7 +47,7 @@ nav:nth-child(1) {
     background-color: #66bdff;
 }
 
-.domoForm {
+.gameForm {
     border: 2px solid #338acc;
     height: 35px;
     width: 900px;
@@ -58,7 +58,7 @@ nav:nth-child(1) {
     border-top-right-radius: 4px;
 }
 
-.domoForm label {
+.gameForm label {
     display: inline-block;
     width: 75px;
     margin-left: 10px;
@@ -67,7 +67,7 @@ nav:nth-child(1) {
     color: white;
 }
 
-.domoForm input[type=text] {
+.gameForm input[type=text] {
     float:left;
 }
 
@@ -179,7 +179,7 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
-#domo {
+#game {
     z-index: 225;
     margin-top: -20px;
     margin-left: 135px;
@@ -190,7 +190,7 @@ nav:nth-child(1) {
     transform: rotate(330deg);
 }
 
-#domos {
+#games {
     width: 60%;
     min-width: 400px;
     border: 2px solid #55acee;
@@ -199,7 +199,7 @@ nav:nth-child(1) {
     margin-top: 100px;
 }
 
-.domo {
+.game {
     width: 95%;
     margin: 0 auto;
     margin-top: 2px;
@@ -212,24 +212,14 @@ nav:nth-child(1) {
     overflow: hidden;
 }
 
-.domo:hover {
+.game:hover {
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: #66bfff;
 }
 
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
-}
-
-h3.emptyDomo {
+h3.emptyGame {
     width: 400px;
     font-size: 1.5em;
     margin: 0 auto;
@@ -237,40 +227,53 @@ h3.emptyDomo {
     margin-top: 18px;
 }
 
-h3.domoName {
+h3.gameName {
     float:left;
-    width: 200px;
+    width: 20%;
     font-weight: bold;
     padding-left: 65px;
     font-size: 1.5em;
 }
 
-h3.domoAge {
+h3.gameStatus {
     float:left;
     text-align: left;
-    width: 100px;
+    width: 20%;
     font-weight: bold;
     padding-right: 40px;
     font-size: 1.5em;
 }
 
-h3.domoLevel {
+h3.gameProgress {
   float:left;
   text-align: left;
-  width: 100px;
+  width: 20%;
   font-weight: bold;
   padding-right: 40px;
   font-size: 1.5em;
 }
 
-.domo:first-child {
+.game:first-child {
     margin-top: 10px;
 }
 
-.domo:last-child {
+.game:last-child {
     margin-bottom:10px;
 }
 
-.deleteDomo {
+.game form {
+  display: inline;
+}
+
+.deleteGame {
   margin-top: 25px;
+  display: inline-block;
+  width: 10%;
+}
+
+.editGame {
+  margin-top: 25px;
+  margin-left: 15px;
+  display: inline-block;
+  width: 10%;
 }
