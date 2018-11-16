@@ -1,0 +1,6 @@
+main: #76c2af
+
+slight: #65a293
+
+Dark: #4f5c73
+

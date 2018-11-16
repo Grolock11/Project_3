@@ -1,6 +1,6 @@
 'use strict';
 
-var handleDomo = function handleDomo(e) {
+var handleGame = function handleGame(e) {
   e.preventDefault();
   $('#domoMessage').animate({ width: 'hide' }, 350);
 
@@ -16,11 +16,33 @@ var handleDomo = function handleDomo(e) {
   return false;
 };
 
-//send a request to delete the domo
-var deleteDomo = function deleteDomo(e, name) {
+//send a request to delete the game
+var deleteGame = function deleteGame(e, name) {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $('.' + name).serialize(), function () {
+  sendAjax('DELETE', '/game', $('.delete' + name).serialize(), function () {
+    loadGamesFromServer();
+  });
+
+  return false;
+};
+
+//send a request to edit the game
+var editGame = function editGame(e, game) {
+  e.preventDefault();
+
+  ReactDOM.render(React.createElement(GameEditMode, { game: game }), document.querySelector('.' + game.name));
+
+  return false;
+};
+
+//send a request to edit the game
+var submitEdit = function submitEdit(e, game) {
+  e.preventDefault();
+
+  sendAjax('POST', '/editGame', $('.edit' + game.name).serialize(), function () {
+    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name));
+
     loadGamesFromServer();
   });
 
@@ -31,13 +53,13 @@ var deleteDomo = function deleteDomo(e, name) {
 var GameForm = function GameForm(props) {
   return React.createElement(
     'form',
-    { id: 'gameForm', onSubmit: handleDomo, name: 'gameForm', action: 'maker', method: 'POST', className: 'gameForm' },
+    { id: 'gameForm', onSubmit: handleGame, name: 'gameForm', action: 'games', method: 'POST', className: 'gameForm' },
     React.createElement(
       'label',
       { htmlFor: 'gameName' },
       'Game: '
     ),
-    React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Domo Name' }),
+    React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Game Name' }),
     React.createElement(
       'label',
       { htmlFor: 'progress' },
@@ -70,9 +92,11 @@ var GameList = function GameList(props) {
   };
 
   var gameNodes = props.games.map(function (game) {
+    var classes = 'game ' + game.name; //to set mutliple classes since `` quotes apparently don't like className
+
     return React.createElement(
       'div',
-      { key: game._id, className: 'game' },
+      { key: game._id, className: classes },
       React.createElement(
         'h3',
         { className: 'gameName' },
@@ -96,21 +120,21 @@ var GameList = function GameList(props) {
       ),
       React.createElement(
         'form',
-        { className: game.name, onSubmit: function onSubmit(e) {
-            return deleteDomo(e, game.name);
+        { className: 'delete' + game.name, onSubmit: function onSubmit(e) {
+            return deleteGame(e, game.name);
           } },
         React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
         React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
-        React.createElement('input', { type: 'hidden', name: 'domoName', value: game.name })
+        React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
       ),
       React.createElement(
         'form',
-        { className: game.name, onSubmit: function onSubmit(e) {
-            return deleteDomo(e, game.name);
+        { className: 'edit' + game.name, onSubmit: function onSubmit(e) {
+            return editGame(e, game);
           } },
         React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
         React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
-        React.createElement('input', { type: 'hidden', name: 'domoName', value: game.name })
+        React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
       )
     );
   });
@@ -119,6 +143,102 @@ var GameList = function GameList(props) {
     'div',
     { className: 'gameList' },
     gameNodes
+  );
+};
+
+var GameEditMode = function GameEditMode(props) {
+  var game = props.game;
+  return React.createElement(
+    'form',
+    { className: 'edit' + game.name, onSubmit: function onSubmit(e) {
+        return submitEdit(e, game);
+      } },
+    React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h3',
+        { className: 'gameName editInput' },
+        ' Name:'
+      ),
+      React.createElement('input', { className: 'editInput', name: 'name', type: 'text', value: game.name, onChange: function onChange(e) {
+          return onInputChange(e.target.value, game, 'name');
+        } })
+    ),
+    React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h3',
+        { className: 'gameStatus editInput' },
+        ' Status:'
+      ),
+      React.createElement('input', { className: 'editInput', name: 'status', type: 'text', value: game.status, onChange: function onChange(e) {
+          return onInputChange(e.target.value, game, 'status');
+        } })
+    ),
+    React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'h3',
+        { className: 'gameProgress editInput' },
+        ' Progress:'
+      ),
+      React.createElement('input', { className: 'editInput', name: 'progress', type: 'text', value: game.progress, onChange: function onChange(e) {
+          return onInputChange(e.target.value, game, 'progress');
+        } })
+    ),
+    React.createElement('input', { className: 'editGame', type: 'submit', value: 'Submit' }),
+    React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
+    React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
+  );
+};
+
+var GameReadMode = function GameReadMode(props) {
+  var game = props.game;
+  return React.createElement(
+    'div',
+    null,
+    React.createElement(
+      'h3',
+      { className: 'gameName' },
+      ' Name: ',
+      game.name,
+      ' '
+    ),
+    React.createElement(
+      'h3',
+      { className: 'gameStatus' },
+      ' Status: ',
+      game.status,
+      ' '
+    ),
+    React.createElement(
+      'h3',
+      { className: 'gameProgress', comment: 'Should only appear if status is in progress' },
+      ' Progress: ',
+      game.progress,
+      ' '
+    ),
+    React.createElement(
+      'form',
+      { className: 'delete' + game.name, onSubmit: function onSubmit(e) {
+          return deleteGame(e, game.name);
+        } },
+      React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
+      React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
+      React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
+    ),
+    React.createElement(
+      'form',
+      { className: 'edit' + game.name, onSubmit: function onSubmit(e) {
+          return editGame(e, game);
+        } },
+      React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
+      React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
+      React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
+    )
   );
 };
 
@@ -139,6 +259,14 @@ var setup = function setup(csrf) {
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
     setup(result.csrfToken);
+  });
+};
+
+var onInputChange = function onInputChange(val, game, field) {
+  game['' + field] = val;
+
+  setState({
+    name: val
   });
 };
 

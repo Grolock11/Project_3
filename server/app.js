@@ -66,6 +66,8 @@ app.use(session({
 
 app.use(csrf());
 app.use((err, req, res, next) => {
+  console.dir(req.body);
+
   if (err.code !== 'EBADCSRFTOKEN') return next(err);
   console.log('Missing CSRF token');
   return false;

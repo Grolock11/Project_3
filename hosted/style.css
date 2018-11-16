@@ -1,3 +1,5 @@
+
+
 html, body {
     height: 100%;
     width: 100%;
@@ -17,7 +19,7 @@ html, body {
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color:#76c2af;
 }
 
 nav:nth-child(1) {
@@ -38,22 +40,22 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color:#76c2af;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: #65a293;
 }
 
 .gameForm {
-    border: 2px solid #338acc;
+    border: 2px solid #65a293;
     height: 35px;
     width: 900px;
     margin-top:0px;
     padding-top:10px;
-    background-color: #55acee;
+    background-color:#76c2af;
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
 }
@@ -75,7 +77,7 @@ nav:nth-child(1) {
     transition: background-color 0.4s ease;
     display: inline;
     width: 90px;
-    background-color: #55acee;
+    background-color:#76c2af;
     border-radius: 2px;
     color: white;
     text-decoration: none;
@@ -88,7 +90,7 @@ nav:nth-child(1) {
 
 .makeDomoSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #65a293;
 }
 
 .mainForm {
@@ -119,9 +121,9 @@ nav:nth-child(1) {
     margin-top: 14px;
     font-size: 1.2em;
     width: 100px;
-    background-color: #55acee;
+    background-color:#76c2af;
     border-radius: 2px;
-    border-color: #66acee;
+    border-color: #71ceb6;
     padding: 3px 0px;
     color: white;
     text-decoration: none;
@@ -133,7 +135,7 @@ nav:nth-child(1) {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #65a293;
 }
 
 #user, #pass, #pass2 {
@@ -145,7 +147,7 @@ nav:nth-child(1) {
 
 #user:focus, #pass:focus, #pass2:focus {
     outline: none;
-    box-shadow: 0px 0px 1px 1px #55acee;
+    box-shadow: 0px 0px 1px 1px#76c2af;
 }
 
 #domoMessage {
@@ -193,7 +195,7 @@ nav:nth-child(1) {
 #games {
     width: 60%;
     min-width: 400px;
-    border: 2px solid #55acee;
+    border: 2px solid#76c2af;
     border-radius: 4px;
     margin: 0 auto;
     margin-top: 100px;
@@ -204,9 +206,9 @@ nav:nth-child(1) {
     margin: 0 auto;
     margin-top: 2px;
     margin-bottom: 2px;
-    border: 2px solid #55acee;
+    border: 2px solid#76c2af;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color:#76c2af;
     padding: 10px;
     min-height:60px;
     overflow: hidden;
@@ -215,8 +217,8 @@ nav:nth-child(1) {
 .game:hover {
     transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
+    transition: background-color 1.5s ease-out;
+    background-color: #65a293;
 }
 
 h3.emptyGame {
