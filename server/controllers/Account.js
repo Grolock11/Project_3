@@ -9,8 +9,8 @@ const loginPage = (req, res) => {
 //Display account page with badic info
 //I'm pretty sure this is giving me an error becaouse I made it an async dunction,
 //but it had to be in order for the await to be used so I'm not sure what I could do about that.
-const accountPage = async (req, res) => {
-  const totalGames = await models.Game.GameModel.findByOwner(req.session.account._id);
+const accountPage = (req, res) => {
+  const totalGames =  models.Game.GameModel.findByOwner(req.session.account._id);
   const numGames = totalGames.length;
   res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username, totalGames: numGames});
 };
