@@ -1,10 +1,10 @@
-const handleError = (message) => {
-  $('#errorMessage').text(message);
-  $('#domoMessage').animate({width: 'toggle'}, 350);
+const displaySnackbar = (message) => {
+  $('#snackbarMessage').text(message);
+  $('#snackbar').animate({height: 'toggle'}, 350);
 };
 
 const redirect = (response) => {
-  $('#domoMessage').animate({width: 'hide'}, 350);
+  $('#snackbar').animate({height: 'hide'}, 350);
   window.location = response.redirect;
 };
 
@@ -18,7 +18,7 @@ const sendAjax = (type, action, data, success) => {
     success: success,
     error: function(xhr, status, error) {
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      displaySnackbar(messageObj.error);
     }
   });
 };

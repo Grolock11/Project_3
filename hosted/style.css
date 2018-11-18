@@ -50,14 +50,15 @@ nav:nth-child(1) {
 }
 
 .gameForm {
-    border: 2px solid #65a293;
-    height: 35px;
-    width: 900px;
+    position: absolute;
+    top: 50px;
+    border-top: 2px solid #65a293;
+    height: 87px;
+    width: 300px;
     margin-top:0px;
     padding-top:10px;
     background-color:#76c2af;
     border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
 }
 
 .gameForm label {
@@ -73,24 +74,11 @@ nav:nth-child(1) {
     float:left;
 }
 
-.makeDomoSubmit {
-    transition: background-color 0.4s ease;
+.gameSubmit {
     display: inline;
-    width: 90px;
-    background-color:#76c2af;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
+    margin-top: 10px;
+    width: 250px;
     margin-left: 20px;
-}
-
-.makeDomoSubmit:link, .makeDomoSubmit:visited, .makeDomoSubmit:hover, .makeDomoSubmit:active {
-    color: white;
-}
-
-.makeDomoSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #65a293;
 }
 
 .mainForm {
@@ -114,71 +102,53 @@ nav:nth-child(1) {
 }
 
 .formSubmit {
-    transition: background-color 0.4s ease;
     display: block;
     text-align: center;
     margin: 0 auto;
     margin-top: 14px;
     font-size: 1.2em;
     width: 100px;
-    background-color:#76c2af;
-    border-radius: 2px;
-    border-color: #71ceb6;
     padding: 3px 0px;
-    color: white;
     text-decoration: none;
 }
 
-.formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
-    color: white;
-}
-
-.formSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #65a293;
-}
-
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #currentPass {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
-    border-radius: 6px;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
     outline: none;
-    box-shadow: 0px 0px 1px 1px#76c2af;
 }
 
-#domoMessage {
+#snackbar {
     display:none;
-    top: 250px;
-    width: 250px;
-    height: 650px;
+    width: 100%;
+    height: 73px;
+    bottom: 0px;
     position: absolute;
     z-index: 200;
-    right: 0px;
     overflow: hidden;
+    text-align: center;
 }
 
-#domoMessage h3 {
-    width: 200px;
+#snackbar h3 {
     position: absolute;
-    top: 0px;
-    left: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline;
+    width: 100%;
+    background-color: gray;
+    padding: 15px;
+    height: 25px;
+    left: 0%;
 }
 
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
-}
-
-#errorMessage {
+#snackbarMessage {
     font-size: 1.2em;
     font-weight: bold;
-    color: red;
-    font-style: italic;
+    color: white;
 }
 
 #game {
@@ -195,29 +165,28 @@ nav:nth-child(1) {
 #games {
     width: 60%;
     min-width: 400px;
-    border: 2px solid#76c2af;
     border-radius: 4px;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-top: 60px;
+    max-height: 70%;
+    overflow: auto;
 }
 
 .game {
     width: 95%;
     margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid#76c2af;
-    border-radius: 4px;
+    border-bottom: 2px solid#65a293;
     background-color:#76c2af;
     padding: 10px;
     min-height:60px;
+    height: 75px;
     overflow: hidden;
 }
 
 .game:hover {
-    transition: border-color 0.2s ease-out;
     border-color: rgba(255,255,255, 0.8);
-    transition: background-color 1.5s ease-out;
+    border-bottom: 2px solid#65a293;
+    transition: background-color 0.5s ease-out;
     background-color: #65a293;
 }
 
@@ -231,27 +200,28 @@ h3.emptyGame {
 
 h3.gameName {
     float:left;
-    width: 20%;
+    width: 35%;
     font-weight: bold;
-    padding-left: 65px;
+    padding-left: 30px;
     font-size: 1.5em;
 }
 
 h3.gameStatus {
     float:left;
     text-align: left;
-    width: 20%;
+    width: 35%;
     font-weight: bold;
-    padding-right: 40px;
+    padding-right: 30px;
     font-size: 1.5em;
 }
 
 h3.gameProgress {
   float:left;
   text-align: left;
-  width: 20%;
+  width: 75%;
   font-weight: bold;
   padding-right: 40px;
+  padding-left: 30px;
   font-size: 1.5em;
 }
 
@@ -278,4 +248,120 @@ h3.gameProgress {
   margin-left: 15px;
   display: inline-block;
   width: 10%;
+}
+
+.editInput {
+  display: inline-block;
+  margin: 2em 0;
+}
+
+.editDiv {
+  width: 15%;
+}
+
+#accountInfo {
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+  text-align: center;
+}
+
+#passwordChangeForm {
+    height: 300px;
+    width: 450px;
+    margin: 0 auto;
+    padding-top: 25px;
+    font-size: 1.2em;
+}
+
+#passwordChangeForm div {
+  display: grid;
+  grid-template: 'label input';
+  grid-template-columns: 250px 200px;
+}
+
+#gameFormInputs div {
+  display: grid;
+  grid-template: 'label input';
+  grid-template-columns: 100px 175px;
+}
+
+#passwordChangeForm h3 {
+    text-align: center;
+}
+
+#passwordChangeForm label {
+    display: inline-block;
+    margin-right: 10px;
+    text-align: left;
+    font-size: 1.2em;
+}
+
+.formButtons {
+    margin-top: 10px;
+}
+
+.formButtons input {
+  margin-left: 25px;
+  width: 150px;
+}
+
+#gamesTitle {
+  display: grid;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 35px;
+  width: 200px;
+  text-align: center;
+}
+
+h3.editLabel {
+  width: 25%;
+  padding-right: 5px;
+}
+
+h3.progressEditLabel {
+  width: 20%;
+  padding-right: 5px;
+}
+
+.editForm div{
+  width: 40%;
+  display: inline-block;
+}
+
+.editForm .progressDiv {
+  width: 100%;
+}
+
+.editForm .progressInput {
+  margin-left: -5%;
+}
+
+.adSpace {
+  display: block !important;
+  background-color: blue;
+  z-index: -10;
+}
+
+.verticalAd {
+  width: 285px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.verticalAd2 {
+  width: 285px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+
+.horizontalAd {
+  width: 800px;
+  height: 100px;
 }

@@ -11,7 +11,11 @@ const router = (app) => {
   app.delete('/game', mid.requiresLogin, controllers.Game.deleteGame);
   app.post('/games', mid.requiresLogin, controllers.Game.make);
   app.post('/editGame', mid.requiresLogin, controllers.Game.editGame);
+  app.get('/account', mid.requiresLogin, controllers.Account.accountPage);
+  app.post('/changePass', mid.requiresSecure, mid.requiresLogin,
+   controllers.Account.changePassword);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
+  app.get('*', mid.requiresSecure, controllers.Account.notFound);
 };
 
 module.exports = router;

@@ -3,10 +3,10 @@
 var handleLogin = function handleLogin(e) {
   e.preventDefault();
 
-  $('domoMessage').animate({ width: 'hide' }, 350);
+  $('snackbar').animate({ height: 'hide' }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '') {
-    handleError('RAWR! Username or password is empty');
+    displaySnackbar('Username or password is empty');
     return false;
   }
 
@@ -20,15 +20,15 @@ var handleLogin = function handleLogin(e) {
 var handleSignup = function handleSignup(e) {
   e.preventDefault();
 
-  $('#domoMessage').animate({ width: 'hide' }, 350);
+  $('#snackbar').animate({ height: 'hide' }, 350);
 
   if ($('#user').val() == '' || $('#pass').val() == '' || $('#pass2').val() == '') {
-    handleError('RAWR! All fields are required');
+    displaySnackbar('All fields are required');
     return false;
   }
 
   if ($('#pass').val() !== $('#pass2').val()) {
-    handleError('RAWR! Passwords do not match');
+    displaySnackbar('Passwords do not match');
     return false;
   }
 
@@ -123,13 +123,13 @@ $(document).ready(function () {
 });
 'use strict';
 
-var handleError = function handleError(message) {
-  $('#errorMessage').text(message);
-  $('#domoMessage').animate({ width: 'toggle' }, 350);
+var displaySnackbar = function displaySnackbar(message) {
+  $('#snackbarMessage').text(message);
+  $('#snackbar').animate({ height: 'toggle' }, 350);
 };
 
 var redirect = function redirect(response) {
-  $('#domoMessage').animate({ width: 'hide' }, 350);
+  $('#snackbar').animate({ height: 'hide' }, 350);
   window.location = response.redirect;
 };
 
@@ -143,7 +143,7 @@ var sendAjax = function sendAjax(type, action, data, success) {
     success: success,
     error: function error(xhr, status, _error) {
       var messageObj = JSON.parse(xhr.responseText);
-      handleError(messageObj.error);
+      displaySnackbar(messageObj.error);
     }
   });
 };

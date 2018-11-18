@@ -13,15 +13,23 @@
 </head>
 <body>
   <nav><a href="/login"></a>
-    <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-    <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
+    <div class="navlink"><a id="logoutButton" href="/logout">Log Out</a></div>
+    <div class="navlink"><a id="gamesButton" href="/games">Games</a></div>
   </nav>
   <section id="content"></section>
+  <div id='accountInfo'>
+    <h2>Account Info</h2>
+    <h3>Username: {{username}}</h3>
+    <h3>Total Games: {{totalGames}}</h3>
+    <div id='passwordChange'>
+      <button id='passwordChangeButton'>Change Password</button>
+    </div>
+  </div>
   <div class='adSpace verticalAd'>Ad here</div>
   <div class='adSpace verticalAd2'>Ad here</div>
   <div id="snackbar">
     <h3><span id="snackbarMessage">Wrong username or password</span></h3>
   </div>
-  <script src="/assets/loginBundle.js"></script>
+  <script src="/assets/accountBundle.js"></script>
 </body>
 </html>

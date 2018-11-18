@@ -13,17 +13,18 @@ const gamePage = (req, res) => {
   });
 };
 
-//Creates a new game from input data. If trying to create an already existing game it will update instead.
+// Creates a new game from input data. If trying to create an already existing
+// game it will update instead.
 const makeGame = (req, res) => {
-  console.dir(req.body);
-
   if ((!req.body.name || !req.body.status) ||
   (req.body.status === 'In Progress' && !req.body.progress)) {
-    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
+    return res.status(400).json(
+      { error: 'Name is required Progress is required if available' }
+    );
   }
 
-  //prevent game name from being a number since it would break some html stuff
-  if(!isNaN(req.body.name)) {
+  // prevent game name from being a number since it would break some html stuff
+  if (!isNaN(req.body.name)) {
     return res.status(400).json({ error: 'Game name cannot be a number' });
   }
 
@@ -36,13 +37,14 @@ const makeGame = (req, res) => {
     progress: req.body.progress,
   };
 
-  //If the game already exists, update the data instead.
+  // If the game already exists, update the data instead.
   Game.GameModel.findOne({ name: req.body.name }, (err, game) => {
     if (game) {
       game.set(gameData);
       gameToSave = game;
-    }
-    else {
+    } else {
+      // Game.GameModel is getting yelled at by eslint but I'm not sure why.
+      // I didn't know how I should fix it so I kept it as it
       gameToSave = Game.GameModel(gameData);
     }
 
@@ -50,9 +52,8 @@ const makeGame = (req, res) => {
 
     gamePromise.then(() => res.json({ redirect: '/games' }));
 
-    gamePromise.catch((err) => {
-      console.log(err);
-      if (err.code === 11000) {
+    gamePromise.catch((err2) => {
+      if (err2.code === 11000) {
         return res.status(400).json({ error: 'Game already exists.' });
       }
 
@@ -61,18 +62,28 @@ const makeGame = (req, res) => {
 
     return gamePromise;
   });
+
+  return res.status(400).json({ error: 'An error occured' });
 };
 
-//Edit game data. It takes place separately to handle an error if the game isn't found
+// Edit game data. It takes place separately to handle an error if the game isn't found
 const editGame = (req, res) => {
   console.dir(req.body);
 
-  if ((!req.body.name || !req.body.status) ||
-  (req.body.status === 'In Progress' && !req.body.progress)) {
-    return res.status(400).json({ error: 'Missing data' });
+  if (!req.body.name) {
+    return res.status(400).json({ error: 'Name is required' });
   }
 
-  if(!isNaN(req.body.name)) {
+  if (!req.body.status) {
+    return res.status(400).json({ error: 'Status is required. Stop messing with things' });
+  }
+
+  if ((req.body.status === 'In Progress' || req.body.status === 'Aiming for 100%')
+  && !req.body.progress) {
+    return res.status(400).json({ error: 'Progress is required if available' });
+  }
+
+  if (!isNaN(req.body.name)) {
     return res.status(400).json({ error: 'Game name cannot be a number' });
   }
 
@@ -82,27 +93,30 @@ const editGame = (req, res) => {
     progress: req.body.progress,
   };
 
-  //If the game already exists, update the data instead.
+  let gameToSave = null;
+
+  // If the game already exists, update the data instead.
   Game.GameModel.findOne({ name: req.body.gameName }, (err, game) => {
     if (game) {
       game.set(gameData);
       gameToSave = game;
-    }
-    else {
-      return res.status(404).json({error: 'Game not found' });
+    } else {
+      return res.status(404).json({ error: 'Game not found' });
     }
 
     const gamePromise = gameToSave.save();
 
     gamePromise.then(() => res.json({ redirect: '/games' }));
 
-    gamePromise.catch((err) => {
-      console.log(err);
+    gamePromise.catch((err2) => {
+      console.log(err2);
       return res.status(400).json({ error: 'An error occured' });
     });
 
     return gamePromise;
   });
+
+  return res.status(400).json({ error: 'An error occured' });
 };
 
 const getGames = (request, response) => {
