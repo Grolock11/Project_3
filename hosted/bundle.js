@@ -50,11 +50,11 @@ var cancelEdit = function cancelEdit(e, game) {
 };
 
 //send a request to edit the game
-var submitEdit = function submitEdit(e, game) {
+var submitEdit = function submitEdit(e, game, oldGame) {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $('.edit' + game.name.replace(/\s/g, "")).serialize(), function () {
-    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name.replace(/\s/g, "")));
+  sendAjax('POST', '/editGame', $('.edit' + oldGame.name.replace(/\s/g, "")).serialize(), function () {
+    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + oldGame.name.replace(/\s/g, "")));
 
     loadGamesFromServer();
   });
@@ -293,7 +293,7 @@ var GameEditMode = function GameEditMode(props) {
   return React.createElement(
     'form',
     { className: 'edit' + game.name.replace(/\s/g, "") + ' editForm', onSubmit: function onSubmit(e) {
-        return submitEdit(e, game);
+        return submitEdit(e, game, oldGame);
       } },
     React.createElement(
       'div',

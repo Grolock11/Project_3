@@ -54,13 +54,13 @@ const cancelEdit = (e, game) => {
 }
 
 //send a request to edit the game
-const submitEdit = (e, game) => {
+const submitEdit = (e, game, oldGame) => {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $(`.edit${game.name.replace(/\s/g, "")}`).serialize(), () => {
+  sendAjax('POST', '/editGame', $(`.edit${oldGame.name.replace(/\s/g, "")}`).serialize(), () => {
     ReactDOM.render(
       <GameReadMode game={game} />,
-      document.querySelector(`.${game.name.replace(/\s/g, "")}`)
+      document.querySelector(`.${oldGame.name.replace(/\s/g, "")}`)
     );
 
     loadGamesFromServer();
@@ -231,7 +231,7 @@ const GameEditMode = (props) => {
     status: game.status,
   };
   return (
-    <form className={`edit${game.name.replace(/\s/g, "")} editForm`} onSubmit={(e) => submitEdit(e, game)} >
+    <form className={`edit${game.name.replace(/\s/g, "")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
     <div>
       <h3 className="gameName editLabel"> Name:</h3><input className='editInput' name="name" type='text' value={game.name} onChange={(e) => onInputChange(e.target.value, game, 'name')} />
     </div>
