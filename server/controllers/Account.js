@@ -12,10 +12,11 @@ const loginPage = (req, res) => {
 const accountPage = (req, res) => {
   const totalGames = models.Game.GameModel.findByOwner(req.session.account._id);
 
-  totalGames.then((totalGames) => {
-    const numGames = totalGames.length;
+  totalGames.then((games) => {
+    const numGames = games.length;
     console.dir(numGames);
-    res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username, totalGames: numGames });
+    res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username,
+      totalGames: numGames });
   });
 
   return totalGames;
