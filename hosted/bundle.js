@@ -24,7 +24,7 @@ var handleGame = function handleGame(e) {
 var deleteGame = function deleteGame(e, name) {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $('.delete' + name).serialize(), function () {
+  sendAjax('DELETE', '/game', $('.delete' + name.replace(/\s/g, "")).serialize(), function () {
     loadGamesFromServer();
   });
 

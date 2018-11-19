@@ -22,7 +22,7 @@ const handleGame = (e) => {
 const deleteGame = (e, name) => {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $(`.delete${name}`).serialize(), () => {
+  sendAjax('DELETE', '/game', $(`.delete${name.replace(/\s/g, "")}`).serialize(), () => {
     loadGamesFromServer();
   });
 
