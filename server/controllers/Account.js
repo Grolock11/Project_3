@@ -12,11 +12,13 @@ const loginPage = (req, res) => {
 const accountPage = (req, res) => {
   const totalGames = models.Game.GameModel.findByOwner(req.session.account._id);
 
-  totalGames.then(() => {
+  totalGames.then((totalGames) => {
     const numGames = totalGames.length;
-    res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username,
-      totalGames: numGames });
+    console.dir(numGames);
+    res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username, totalGames: numGames });
   });
+
+  return totalGames;
 };
 
 // Redirect to games page if user is logged in. Login page if not
