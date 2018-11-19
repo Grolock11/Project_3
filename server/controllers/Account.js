@@ -6,21 +6,24 @@ const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
-//Display account page with badic info
-//I'm pretty sure this is giving me an error becaouse I made it an async dunction,
-//but it had to be in order for the await to be used so I'm not sure what I could do about that.
-const accountPage = async (req, res) => {
-  const totalGames = await models.Game.GameModel.findByOwner(req.session.account._id);
-  const numGames = totalGames.length;
-  res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username, totalGames: numGames});
+// Display account page with badic info
+// I'm pretty sure this is giving me an error becaouse I made it an async dunction,
+// but it had to be in order for the await to be used so I'm not sure what I could do about that.
+const accountPage = (req, res) => {
+  const totalGames = models.Game.GameModel.findByOwner(req.session.account._id);
+
+  totalGames.then(() => {
+    const numGames = totalGames.length;
+    res.render('account', { csrfToken: req.csrfToken(), username: req.session.account.username,
+      totalGames: numGames });
+  });
 };
 
-//Redirect to games page if user is logged in. Login page if not
+// Redirect to games page if user is logged in. Login page if not
 const notFound = (req, res) => {
-  if(req.session.account) {
+  if (req.session.account) {
     res.redirect('/games');
-  }
-  else {
+  } else {
     res.redirect('/');
   }
 };
@@ -108,7 +111,7 @@ const changePassword = (request, response) => {
   }
 
   if (newPassword !== newPassword2) {
-    return res.status(400).json({ error: 'Passwords must match'})
+    return res.status(400).json({ error: 'Passwords must match' });
   }
 
   return Account.AccountModel.authenticate(username, password, (err, account) => {
@@ -117,7 +120,7 @@ const changePassword = (request, response) => {
       return res.status(401).json({ error: 'Wrong password' });
     }
 
-    if(account) {
+    if (account) {
       Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
         const accountData = {
           username,
@@ -125,16 +128,18 @@ const changePassword = (request, response) => {
           password: hash,
         };
 
-        Account.AccountModel.findByUsername(username, (err, user) => {
+        Account.AccountModel.findByUsername(username, (err2, user) => {
           user.set(accountData);
           user.save();
 
-          return res.status(200).json({status: 200});
+          return res.status(200).json({ status: 200 });
         });
       });
     }
+
+    return res.status(400).json({ error: 'An error occured' });
   });
-}
+};
 
 const getToken = (request, response) => {
   const req = request;

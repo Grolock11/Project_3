@@ -38,14 +38,14 @@ const makeGame = (req, res) => {
   };
 
   // If the game already exists, update the data instead.
-  Game.GameModel.findOne({ name: req.body.name }, (err, game) => {
+  return Game.GameModel.findOne({ name: req.body.name }, (err, game) => {
     if (game) {
       game.set(gameData);
       gameToSave = game;
     } else {
       // Game.GameModel is getting yelled at by eslint but I'm not sure why.
       // I didn't know how I should fix it so I kept it as it
-      gameToSave = Game.GameModel(gameData);
+      gameToSave = new Game.GameModel(gameData);
     }
 
     const gamePromise = gameToSave.save();
@@ -62,8 +62,6 @@ const makeGame = (req, res) => {
 
     return gamePromise;
   });
-
-  return res.status(400).json({ error: 'An error occured' });
 };
 
 // Edit game data. It takes place separately to handle an error if the game isn't found
@@ -96,7 +94,7 @@ const editGame = (req, res) => {
   let gameToSave = null;
 
   // If the game already exists, update the data instead.
-  Game.GameModel.findOne({ name: req.body.gameName }, (err, game) => {
+  return Game.GameModel.findOne({ name: req.body.gameName }, (err, game) => {
     if (game) {
       game.set(gameData);
       gameToSave = game;
@@ -115,8 +113,6 @@ const editGame = (req, res) => {
 
     return gamePromise;
   });
-
-  return res.status(400).json({ error: 'An error occured' });
 };
 
 const getGames = (request, response) => {
