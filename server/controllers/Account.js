@@ -34,7 +34,7 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
-//log the user in
+// log the user in
 const login = (request, response) => {
   const req = request;
   const res = response;
@@ -57,7 +57,7 @@ const login = (request, response) => {
   });
 };
 
-//signup a new user
+// signup a new user
 const signup = (request, response) => {
   const req = request;
   const res = response;
@@ -100,7 +100,7 @@ const signup = (request, response) => {
   });
 };
 
-//change the users password
+// change the users password
 const changePassword = (request, response) => {
   const req = request;
   const res = response;
@@ -132,13 +132,16 @@ const changePassword = (request, response) => {
           password: hash,
         };
 
-      return Account.AccountModel.findByUsername(username, (err2, user) => {
+        return Account.AccountModel.findByUsername(username, (err2, user) => {
           user.set(accountData);
           user.save();
 
           return res.status(200).json({ status: 200 });
         });
       });
+    }
+    else {
+      return res.status(400).json({ error: 'Aaccount not found' });
     }
   });
 };
