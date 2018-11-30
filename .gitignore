@@ -6,6 +6,8 @@ yarn-debug.log*
 yarn-error.log*
 .docx
 
+gulpfile.js
+
 # Runtime data
 pids
 *.pid
