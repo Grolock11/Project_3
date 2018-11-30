@@ -125,7 +125,7 @@ const changePassword = (request, response) => {
     }
 
     if (account) {
-      Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
+      return Account.AccountModel.generateHash(req.body.pass, (salt, hash) => {
         const accountData = {
           username,
           salt,
@@ -140,9 +140,7 @@ const changePassword = (request, response) => {
         });
       });
     }
-    else {
-      return res.status(400).json({ error: 'Aaccount not found' });
-    }
+    return res.status(404).json({ error: 'Account not found' });
   });
 };
 
