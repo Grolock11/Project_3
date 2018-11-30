@@ -6,9 +6,7 @@ const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
-// Display account page with badic info
-// I'm pretty sure this is giving me an error becaouse I made it an async dunction,
-// but it had to be in order for the await to be used so I'm not sure what I could do about that.
+// Display account page with basic info
 const accountPage = (req, res) => {
   const totalGames = models.Game.GameModel.findByOwner(req.session.account._id);
 
@@ -36,6 +34,7 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
+//log the user in
 const login = (request, response) => {
   const req = request;
   const res = response;
@@ -58,6 +57,7 @@ const login = (request, response) => {
   });
 };
 
+//signup a new user
 const signup = (request, response) => {
   const req = request;
   const res = response;
@@ -100,6 +100,7 @@ const signup = (request, response) => {
   });
 };
 
+//change the users password
 const changePassword = (request, response) => {
   const req = request;
   const res = response;
@@ -131,7 +132,7 @@ const changePassword = (request, response) => {
           password: hash,
         };
 
-        Account.AccountModel.findByUsername(username, (err2, user) => {
+      return Account.AccountModel.findByUsername(username, (err2, user) => {
           user.set(accountData);
           user.save();
 
@@ -139,8 +140,6 @@ const changePassword = (request, response) => {
         });
       });
     }
-
-    return res.status(400).json({ error: 'An error occured' });
   });
 };
 

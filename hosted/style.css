@@ -365,3 +365,12 @@ h3.progressEditLabel {
   width: 800px;
   height: 100px;
 }
+
+.ui-helper-hidden-accessible {
+  display: none;
+}
+
+.ui-menu-item {
+  background-color: white;
+  
+}

@@ -69,6 +69,13 @@ const submitEdit = (e, game, oldGame) => {
   return false;
 }
 
+//populate autocomplete based on user search
+const searchGames = (currentSearch) => {
+  // $('#gameName').autocomplete({
+  //   source: ['currentSearch'],
+  // });
+}
+
 //using a comment attribute temporarily in react to store comments inline
 const GameForm = (props) => {
   return (
@@ -76,7 +83,7 @@ const GameForm = (props) => {
       <div id="gameFormInputs">
         <div>
           <label htmlFor="gameName">Game: </label>
-          <input id="gameName" type="text" name="name" placeholder="Game Name" />
+          <input id="gameName" type="text" name="name" placeholder="Game Name" onChange={(e) => searchGames(e.target.value)} />
         </div>
         <div>
           <label htmlFor="gameStatus">Status: </label>
@@ -307,7 +314,7 @@ const setup = function(csrf) {
   );
 
   $('#gameName').autocomplete({
-    source: ['testing1, testing2, random, randomtest']
+    source: ['test', 'test2', 'random', 'randomtest'],
   });
 
   loadGamesFromServer();

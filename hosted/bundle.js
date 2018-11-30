@@ -62,8 +62,15 @@ var submitEdit = function submitEdit(e, game, oldGame) {
   return false;
 };
 
+//populate autocomplete based on user search
+var searchGames = function searchGames(currentSearch) {}
+// $('#gameName').autocomplete({
+//   source: ['currentSearch'],
+// });
+
+
 //using a comment attribute temporarily in react to store comments inline
-var GameForm = function GameForm(props) {
+;var GameForm = function GameForm(props) {
   return React.createElement(
     'form',
     { id: 'gameForm', onSubmit: handleGame, name: 'gameForm', action: 'games', method: 'POST', className: 'gameForm' },
@@ -78,7 +85,9 @@ var GameForm = function GameForm(props) {
           { htmlFor: 'gameName' },
           'Game: '
         ),
-        React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Game Name' })
+        React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Game Name', onChange: function onChange(e) {
+            return searchGames(e.target.value);
+          } })
       ),
       React.createElement(
         'div',
@@ -457,7 +466,7 @@ var setup = function setup(csrf) {
   ReactDOM.render(React.createElement(GameList, { games: [] }), document.querySelector('#games'));
 
   $('#gameName').autocomplete({
-    source: ['testing1, testing2, random, randomtest']
+    source: ['test', 'test2', 'random', 'randomtest']
   });
 
   loadGamesFromServer();
