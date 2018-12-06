@@ -202,16 +202,16 @@ h3.gameName {
     width: 35%;
     font-weight: bold;
     padding-left: 30px;
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 h3.gameStatus {
     float:left;
     text-align: left;
-    width: 300;
+    width: 25%;
     font-weight: bold;
     padding-right: 30px;
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 h3.gameProgress {
@@ -221,7 +221,7 @@ h3.gameProgress {
   font-weight: bold;
   padding-right: 40px;
   padding-left: 30px;
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 .game:first-child {
@@ -239,19 +239,19 @@ h3.gameProgress {
 .deleteGame {
   margin-top: 25px;
   display: inline-block;
-  width: 10%;
+  width: 8%;
 }
 
 .editGame {
-  margin-top: 25px;
+  margin-top: 35px;
   margin-left: 15px;
   display: inline-block;
-  width: 10%;
+  width: 8%;
 }
 
 .editInput {
   display: inline-block;
-  margin: 2em 0;
+  margin: 2.5em 0;
 }
 
 .editDiv {
@@ -320,8 +320,9 @@ h3.editLabel {
 }
 
 h3.progressEditLabel {
-  width: 20%;
+  width: 10%;
   padding-right: 5px;
+  padding-left: 140px;
 }
 
 .editForm div{
@@ -329,12 +330,15 @@ h3.progressEditLabel {
   display: inline-block;
 }
 
+.editForm .editStatusDiv {
+  width: 215px;
+}
+
 .editForm .progressDiv {
   width: 100%;
 }
 
 .editForm .progressInput {
-  margin-left: -5%;
 }
 
 .adSpace {

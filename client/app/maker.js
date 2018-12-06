@@ -271,36 +271,35 @@ const GameEditMode = (props) => {
     name: game.name,
     progress: game.progress,
     status: game.status,
+    cover: game.cover,
   };
   return (
     <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
-    <div>
-    {game.cover && <img src={game.cover} />}
-    {!game.cover && <h3 className='imgAlt'>No Image</h3>}
-    <h3 className="gameName"> {game.name} </h3>
-    </div>
-    <div className='editStatusDiv'>
-      <h3 className="gameStatus editLabel"> Status:</h3><select id="gameStatus" className='editInput' name='status' onChange={(e) => {editStatusChange(e.target.value, game)}} >
-      {game.status == 'Not yet started' && <option value='Not yet started' selected>Not yet started</option>}
-      {game.status != 'Not yet started' && <option value='Not yet started'>Not yet started</option>}
-      {game.status == 'In Progress' && <option value='In Progress' selected >In Progress</option>}
-      {game.status != 'In Progress' &&<option value='In Progress'>In Progress</option>}
-      {game.status == 'Completed' && <option value='Completed' selected >Completed</option>}
-      {game.status != 'Completed' && <option value='Completed'>Completed</option>}
-      {game.status == 'Aiming for 100%' && <option value='Aiming for 100%' selected >Aiming for 100%</option>}
-      {game.status != 'Aiming for 100%' && <option value='Aiming for 100%'>Aiming for 100%</option>}
-      {game.status == 'Completed 100%' && <option value='Completed 100%' selected >Completed 100%</option>}
-      {game.status != 'Completed 100%' && <option value='Completed 100%'>Completed 100%</option>}
-      </select>
-    </div>
-      <input className='cancelEdit' type='button' value='Cancel' onClick={(e) => cancelEdit(e, oldGame)} />
-      <input className="editGame" type='submit' value='Submit'/>
-      <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
-      <input type="hidden" name="gameName" value={game.name} />
-      <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
-        <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
-        {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
+      {game.cover && <img src={game.cover} />}
+      {!game.cover && <h3 className='imgAlt'>No Image</h3>}
+      <h3 className="gameName"> {game.name} </h3>
+      <div className='editStatusDiv'>
+        <h3 className="gameStatus editLabel"> Status:</h3><select id="gameStatus" className='editInput' name='status' onChange={(e) => {editStatusChange(e.target.value, game)}} >
+        {game.status == 'Not yet started' && <option value='Not yet started' selected>Not yet started</option>}
+        {game.status != 'Not yet started' && <option value='Not yet started'>Not yet started</option>}
+        {game.status == 'In Progress' && <option value='In Progress' selected >In Progress</option>}
+        {game.status != 'In Progress' &&<option value='In Progress'>In Progress</option>}
+        {game.status == 'Completed' && <option value='Completed' selected >Completed</option>}
+        {game.status != 'Completed' && <option value='Completed'>Completed</option>}
+        {game.status == 'Aiming for 100%' && <option value='Aiming for 100%' selected >Aiming for 100%</option>}
+        {game.status != 'Aiming for 100%' && <option value='Aiming for 100%'>Aiming for 100%</option>}
+        {game.status == 'Completed 100%' && <option value='Completed 100%' selected >Completed 100%</option>}
+        {game.status != 'Completed 100%' && <option value='Completed 100%'>Completed 100%</option>}
+        </select>
       </div>
+        <input className='cancelEdit' type='button' value='Cancel' onClick={(e) => cancelEdit(e, oldGame)} />
+        <input className="editGame" type='submit' value='Submit'/>
+        <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
+        <input type="hidden" name="gameName" value={game.name} />
+        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
+          <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
+          {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
+        </div>
     </form>
   );
 };

@@ -335,29 +335,26 @@ var GameEditMode = function GameEditMode(props) {
   var oldGame = {
     name: game.name,
     progress: game.progress,
-    status: game.status
+    status: game.status,
+    cover: game.cover
   };
   return React.createElement(
     'form',
     { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + ' editForm', onSubmit: function onSubmit(e) {
         return submitEdit(e, game, oldGame);
       } },
+    game.cover && React.createElement('img', { src: game.cover }),
+    !game.cover && React.createElement(
+      'h3',
+      { className: 'imgAlt' },
+      'No Image'
+    ),
     React.createElement(
-      'div',
-      null,
-      game.cover && React.createElement('img', { src: game.cover }),
-      !game.cover && React.createElement(
-        'h3',
-        { className: 'imgAlt' },
-        'No Image'
-      ),
-      React.createElement(
-        'h3',
-        { className: 'gameName' },
-        ' ',
-        game.name,
-        ' '
-      )
+      'h3',
+      { className: 'gameName' },
+      ' ',
+      game.name,
+      ' '
     ),
     React.createElement(
       'div',
