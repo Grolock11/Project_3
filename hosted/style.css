@@ -27,26 +27,22 @@ nav:nth-child(1) {
 }
 
 .navlink {
-    padding: 5px;
-    padding-top: 12px;
-    padding-left: 20px;
-    color: white;
+    padding: 0 2px !important;
+    margin-top: 6px !important;
+    margin-left: 20px !important;
     font-size: 1.3em;
     float: left;
 }
 
 .navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
-    color: white;
+    color: black;
     text-decoration: none;
     padding: 5px;
-    border-radius: 4px;
-    background-color:#76c2af;
-    transition: background-color 0.4s ease;
 }
 
-.navlink a:hover {
-    transition: background-color 0.8s ease;
-    background-color: #65a293;
+.mdl-button--colored:hover {
+    transition: background-color 0.5s ease !important;
+    background-color: #c1c0b5 !important;
 }
 
 .gameForm {
@@ -162,7 +158,7 @@ nav:nth-child(1) {
 }
 
 #games {
-    width: 60%;
+    width: 70%;
     min-width: 400px;
     border-radius: 4px;
     margin: 0 auto;
@@ -172,7 +168,7 @@ nav:nth-child(1) {
 }
 
 .game {
-    width: 95%;
+    width: 97%;
     margin: 0 auto;
     border-bottom: 2px solid#65a293;
     background-color:#76c2af;
@@ -222,6 +218,7 @@ h3.gameProgress {
   padding-right: 40px;
   padding-left: 30px;
   font-size: 1.2em;
+  max-height: 750px;
 }
 
 .game:first-child {
@@ -237,16 +234,22 @@ h3.gameProgress {
 }
 
 .deleteGame {
-  margin-top: 25px;
+  margin-top: 35px !important;
   display: inline-block;
-  width: 8%;
+  width: 10%;
+}
+
+.cancelEdit {
+  margin-top: 35px !important;
+  display: inline-block;
+  width: 10%;
 }
 
 .editGame {
-  margin-top: 35px;
-  margin-left: 15px;
+  margin-top: 35px !important;
+  margin-left: 10px !important;
   display: inline-block;
-  width: 8%;
+  width: 10%;
 }
 
 .editInput {
@@ -320,9 +323,10 @@ h3.editLabel {
 }
 
 h3.progressEditLabel {
-  width: 10%;
+  width: 13%;
   padding-right: 5px;
   padding-left: 140px;
+  font-size: 1em;
 }
 
 .editForm div{
@@ -331,24 +335,26 @@ h3.progressEditLabel {
 }
 
 .editForm .editStatusDiv {
-  width: 215px;
+  width: 25%;
+  padding-right: 30px;
 }
 
 .editForm .progressDiv {
   width: 100%;
+  padding-top: 0;
 }
 
 .editForm .progressInput {
 }
 
 .adSpace {
-  display: block !important;
+  display: block;
   background-color: blue;
   z-index: -10;
 }
 
 .verticalAd {
-  width: 285px;
+  width: 200px;
   height: 100%;
   position: absolute;
   top: 0;
@@ -356,7 +362,7 @@ h3.progressEditLabel {
 }
 
 .verticalAd2 {
-  width: 285px;
+  width: 200px;
   height: 100%;
   position: absolute;
   top: 0;
@@ -398,5 +404,15 @@ img {
   font-weight: bold;
 }
 
+.mdl-button--colored {
+  background-color: #e0dfd1 !important;
+  color: black !important;
+  border-radius: 10px !important;
+}
 
+.mdl-textfield__input {
+  width: 25% !important;
+  margin-top: 25px !important;
+  border-color: white !important;
+}
 

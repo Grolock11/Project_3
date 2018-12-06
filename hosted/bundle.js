@@ -216,14 +216,14 @@ var RefreshProgress = function RefreshProgress(props) {
 
   return React.createElement(
     'div',
-    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv' },
+    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv mdl-textfield mdl-js-textfield' },
     React.createElement(
       'h3',
       { className: 'gameProgress editLabel progressEditLabel' },
       'Progress: ',
       !checkStatus(game.status) && 'N/A'
     ),
-    checkStatus(game.status) && React.createElement('input', { className: 'editInput progressInput', name: 'progress', type: 'text', value: game.progress, onChange: function onChange(e) {
+    checkStatus(game.status) && React.createElement('input', { className: 'editInput progressInput mdl-textfield__input', name: 'progress', type: 'text', value: game.progress, onChange: function onChange(e) {
         return onInputChange(e.target.value, game, 'progress');
       } })
   );
@@ -291,7 +291,7 @@ var GameList = function GameList(props) {
         { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
             return deleteGame(e, game.name);
           } },
-        React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
+        React.createElement('input', { className: 'deleteGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Delete' }),
         React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
         React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
       ),
@@ -300,7 +300,7 @@ var GameList = function GameList(props) {
         { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
             return editGame(e, game);
           } },
-        React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
+        React.createElement('input', { className: 'editGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Edit' }),
         React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
         React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
       )
@@ -421,22 +421,22 @@ var GameEditMode = function GameEditMode(props) {
         )
       )
     ),
-    React.createElement('input', { className: 'cancelEdit', type: 'button', value: 'Cancel', onClick: function onClick(e) {
+    React.createElement('input', { className: 'cancelEdit mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'button', value: 'Cancel', onClick: function onClick(e) {
         return cancelEdit(e, oldGame);
       } }),
-    React.createElement('input', { className: 'editGame', type: 'submit', value: 'Submit' }),
+    React.createElement('input', { className: 'editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Submit' }),
     React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
     React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name }),
     React.createElement(
       'div',
-      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv' },
+      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv mdl-textfield mdl-js-textfield' },
       React.createElement(
         'h3',
         { className: 'gameProgress editLabel progressEditLabel' },
         'Progress: ',
         !checkStatus(game.status) && 'N/A'
       ),
-      checkStatus(game.status) && React.createElement('input', { className: 'editInput progressInput', name: 'progress', type: 'text', value: game.progress, onChange: function onChange(e) {
+      checkStatus(game.status) && React.createElement('input', { className: 'editInput progressInput mdl-textfield__input', name: 'progress', type: 'text', value: game.progress, onChange: function onChange(e) {
           return onInputChange(e.target.value, game, 'progress');
         } })
     )
@@ -483,7 +483,7 @@ var GameReadMode = function GameReadMode(props) {
       { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
           return deleteGame(e, game.name);
         } },
-      React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
+      React.createElement('input', { className: 'deleteGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Delete' }),
       React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
       React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
     ),
@@ -492,7 +492,7 @@ var GameReadMode = function GameReadMode(props) {
       { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
           return editGame(e, game);
         } },
-      React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
+      React.createElement('input', { className: 'editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Edit' }),
       React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: $('#csrf').val() }),
       React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name })
     )

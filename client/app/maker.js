@@ -192,9 +192,9 @@ const RefreshProgress = (props) => {
   const game = props.game;
 
   return(
-    <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
+    <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv mdl-textfield mdl-js-textfield`}>
       <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
-      {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
+      {checkStatus(game.status) && <input className='editInput progressInput mdl-textfield__input' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
     </div>
   )
 }
@@ -228,12 +228,12 @@ const GameList = (props) => {
         <h3 className="gameStatus"> Status: {game.status} </h3>
         <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
         <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
-          <input className="deleteGame" type='submit' value='Delete'/>
+          <input className="deleteGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Delete'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
         </form>
         <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
-          <input className="editGame" type='submit' value='Edit'/>
+          <input className="editGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Edit'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
         </form>
@@ -292,13 +292,13 @@ const GameEditMode = (props) => {
         {game.status != 'Completed 100%' && <option value='Completed 100%'>Completed 100%</option>}
         </select>
       </div>
-        <input className='cancelEdit' type='button' value='Cancel' onClick={(e) => cancelEdit(e, oldGame)} />
-        <input className="editGame" type='submit' value='Submit'/>
+        <input className='cancelEdit mdl-button mdl-js-button mdl-button--raised mdl-button--colored' type='button' value='Cancel' onClick={(e) => cancelEdit(e, oldGame)} />
+        <input className="editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Submit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
-        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
+        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv mdl-textfield mdl-js-textfield`}>
           <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
-          {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
+          {checkStatus(game.status) && <input className='editInput progressInput mdl-textfield__input' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
         </div>
     </form>
   );
@@ -317,12 +317,12 @@ const GameReadMode = (props) => {
       <h3 className="gameStatus"> Status: {game.status} </h3>
       <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
       <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
-        <input className="deleteGame" type='submit' value='Delete'/>
+        <input className="deleteGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Delete'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
       </form>
       <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
-        <input className="editGame" type='submit' value='Edit'/>
+        <input className="editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Edit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
       </form>
