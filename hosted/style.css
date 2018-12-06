@@ -125,7 +125,7 @@ nav:nth-child(1) {
 #snackbar {
     display:none;
     width: 100%;
-    height: 73px;
+    height: 85px;
     bottom: 0px;
     position: absolute;
     z-index: 200;
@@ -141,12 +141,11 @@ nav:nth-child(1) {
     width: 100%;
     background-color: gray;
     padding: 15px;
-    height: 25px;
     left: 0%;
 }
 
 #snackbarMessage {
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: bold;
     color: white;
 }
