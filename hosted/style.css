@@ -177,8 +177,8 @@ nav:nth-child(1) {
     margin: 0 auto;
     border-bottom: 2px solid#65a293;
     background-color:#76c2af;
-    padding: 10px;
-    min-height:60px;
+    padding: 0 10px 10px 5px;
+    min-height:90px;
     height: 75px;
     overflow: hidden;
 }
@@ -209,7 +209,7 @@ h3.gameName {
 h3.gameStatus {
     float:left;
     text-align: left;
-    width: 35%;
+    width: 300;
     font-weight: bold;
     padding-right: 30px;
     font-size: 1.5em;
@@ -372,5 +372,28 @@ h3.progressEditLabel {
 
 .ui-menu-item {
   background-color: white;
-  
+
 }
+
+img {
+  height: 90px;
+  width: 90px;
+  padding: 5px 10px;
+  float: left;
+  display: inline-block;
+}
+
+.imgAlt {
+  height: 90px;
+  width: 90px;
+  padding: 5px 10px;
+  float: left;
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+
+

@@ -1,6 +1,8 @@
 const models = require('../models');
+const igbd = require('igdb-api-node').default;
 
 const Game = models.Game;
+const igbdKey = process.env.igbd || '7d5dde2197753afed047fb704b503de4';
 
 const gamePage = (req, res) => {
   Game.GameModel.findByOwner(req.session.account._id, (err, docs) => {
@@ -35,42 +37,38 @@ const makeGame = (req, res) => {
     status: req.body.status,
     owner: req.session.account._id,
     progress: req.body.progress,
+    cover: req.body.cover
   };
 
   // If the game already exists, update the data instead.
-  return Game.GameModel.findOne({ name: req.body.name }, (err, game) => {
-    if (game) {
-      game.set(gameData);
-      gameToSave = game;
-    } else {
-      // Game.GameModel is getting yelled at by eslint but I'm not sure why.
-      // I didn't know how I should fix it so I kept it as it
-      gameToSave = new Game.GameModel(gameData);
-    }
-
-    const gamePromise = gameToSave.save();
-
-    gamePromise.then(() => res.json({ redirect: '/games' }));
-
-    gamePromise.catch((err2) => {
-      if (err2.code === 11000) {
-        return res.status(400).json({ error: 'Game already exists.' });
+  return Game.GameModel.findOne({ name: req.body.name, owner: req.session.account._id },
+    (err, game) => {
+      if (game) {
+        game.set(gameData);
+        gameToSave = game;
+      } else {
+        gameToSave = new Game.GameModel(gameData);
       }
 
-      return res.status(400).json({ error: 'An error occured' });
-    });
+      const gamePromise = gameToSave.save();
 
-    return gamePromise;
-  });
+      gamePromise.then(() => res.json({ redirect: '/games' }));
+
+      gamePromise.catch((err2) => {
+        if (err2.code === 11000) {
+          return res.status(400).json({ error: 'Game already exists.' });
+        }
+
+        return res.status(400).json({ error: 'An error occured' });
+      });
+
+      return gamePromise;
+    });
 };
 
 // Edit game data. It takes place separately to handle an error if the game isn't found
 const editGame = (req, res) => {
   console.dir(req.body);
-
-  if (!req.body.name) {
-    return res.status(400).json({ error: 'Name is required' });
-  }
 
   if (!req.body.status) {
     return res.status(400).json({ error: 'Status is required. Stop messing with things' });
@@ -86,7 +84,6 @@ const editGame = (req, res) => {
   }
 
   const gameData = {
-    name: req.body.name,
     status: req.body.status,
     progress: req.body.progress,
   };
@@ -130,12 +127,10 @@ const getGames = (request, response) => {
 };
 
 const deleteGame = (request, response) => {
-  console.log('made it into deleteGame');
-
   const req = request;
   const res = response;
 
-  Game.GameModel.remove({ name: req.body.gameName }, (err) => {
+  Game.GameModel.remove({ name: req.body.gameName, owner: req.session.account._id }, (err) => {
     console.dir(err);
     if (err) {
       return res.status(400).json({ error: 'An error occured while deleting the game' });
@@ -144,9 +139,31 @@ const deleteGame = (request, response) => {
   });
 };
 
+const search = (request, response) => {
+  const req = request;
+  const res = response;
+  console.dir(req.body);
+
+  if (req.body.name !== '') {
+    const client = igbd(igbdKey);
+
+    client.games({
+      field: 'name',
+      limit: '10',
+      search: req.body.name,
+    }, [
+      'name',
+      'cover',
+    ]).then(gamesRes => res.status(200).json({ games: gamesRes })).catch(() => {
+
+    });
+  }
+};
+
 module.exports.gamePage = gamePage;
 module.exports.getGames = getGames;
 module.exports.deleteGame = deleteGame;
 module.exports.make = makeGame;
 module.exports.editGame = editGame;
+module.exports.search = search;
 

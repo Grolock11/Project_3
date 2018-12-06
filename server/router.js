@@ -14,6 +14,7 @@ const router = (app) => {
   app.get('/account', mid.requiresLogin, controllers.Account.accountPage);
   app.post('/changePass', mid.requiresSecure, mid.requiresLogin,
    controllers.Account.changePassword);
+  app.post('/searchGames', mid.requiresSecure, mid.requiresLogin, controllers.Game.search);
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.get('*', mid.requiresSecure, controllers.Account.notFound);
 };

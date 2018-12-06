@@ -24,7 +24,7 @@ var handleGame = function handleGame(e) {
 var deleteGame = function deleteGame(e, name) {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $('.delete' + name.replace(/\s/g, "SPACE")).serialize(), function () {
+  sendAjax('DELETE', '/game', $('.delete' + name.replace(/\s|:|-|'/g, "QZ")).serialize(), function () {
     loadGamesFromServer();
   });
 
@@ -35,7 +35,7 @@ var deleteGame = function deleteGame(e, name) {
 var editGame = function editGame(e, game) {
   e.preventDefault();
 
-  ReactDOM.render(React.createElement(GameEditMode, { game: game }), document.querySelector('.' + game.name.replace(/\s/g, "SPACE")));
+  ReactDOM.render(React.createElement(GameEditMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'/g, "QZ")));
 
   return false;
 };
@@ -44,7 +44,7 @@ var editGame = function editGame(e, game) {
 var cancelEdit = function cancelEdit(e, game) {
   e.preventDefault();
 
-  ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name.replace(/\s/g, "SPACE")));
+  ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'/g, "QZ")));
 
   return false;
 };
@@ -53,8 +53,8 @@ var cancelEdit = function cancelEdit(e, game) {
 var submitEdit = function submitEdit(e, game, oldGame) {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $('.edit' + oldGame.name.replace(/\s/g, "SPACE")).serialize(), function () {
-    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + oldGame.name.replace(/\s/g, "SPACE")));
+  sendAjax('POST', '/editGame', $('.edit' + oldGame.name.replace(/\s|:|-|'/g, "QZ")).serialize(), function () {
+    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + oldGame.name.replace(/\s|:|-|'/g, "QZ")));
 
     loadGamesFromServer();
   });
@@ -63,14 +63,45 @@ var submitEdit = function submitEdit(e, game, oldGame) {
 };
 
 //populate autocomplete based on user search
-var searchGames = function searchGames(currentSearch) {}
-// $('#gameName').autocomplete({
-//   source: ['currentSearch'],
-// });
+var searchGames = function searchGames(currentSearch) {
 
+  //reset underlying value for game image so it doesn't save the wrong one
+  $('#gameCover').val('');
+
+  sendAjax('POST', '/searchGames', $('#gameForm').serialize(), function (response) {
+    var games = response.games.body;
+    console.dir(response.games.body);
+
+    if (games.length) {
+      var gameNames = games.map(function (game) {
+        return game.name;
+      });
+
+      //set the autocomplete to show the games found from the search
+      $('#gameName').autocomplete({
+        source: gameNames,
+        select: function select(event, ui) {
+          var selected = games.filter(function (game) {
+            return game.name == ui.item.value;
+          });
+
+          console.dir(ui.item.value);
+          console.dir(selected);
+
+          //Set the image for the game if it has one
+          if (selected[0].cover) {
+            $('#gameCover').val(selected[0].cover.url);
+          } else {
+            $('#gameCover').val('');
+          }
+        }
+      });
+    }
+  });
+};
 
 //using a comment attribute temporarily in react to store comments inline
-;var GameForm = function GameForm(props) {
+var GameForm = function GameForm(props) {
   return React.createElement(
     'form',
     { id: 'gameForm', onSubmit: handleGame, name: 'gameForm', action: 'games', method: 'POST', className: 'gameForm' },
@@ -130,6 +161,7 @@ var searchGames = function searchGames(currentSearch) {}
       React.createElement('div', { id: 'progressArea' })
     ),
     React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: props.csrf }),
+    React.createElement('input', { id: 'gameCover', type: 'hidden', name: 'cover', value: '' }),
     React.createElement('input', { className: 'gameSubmit', type: 'submit', value: 'Submit' })
   );
 };
@@ -173,8 +205,8 @@ var statusChange = function statusChange() {
 var editStatusChange = function editStatusChange(value, game) {
   game.status = value;
 
-  if ($('.edit' + game.name.replace(/\s/g, "SPACE") + 'Progress').length) {
-    ReactDOM.render(React.createElement(RefreshProgress, { game: game }), document.querySelector('.edit' + game.name.replace(/\s/g, "SPACE") + 'Progress'));
+  if ($('.edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress').length) {
+    ReactDOM.render(React.createElement(RefreshProgress, { game: game }), document.querySelector('.edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress'));
   }
 };
 
@@ -184,7 +216,7 @@ var RefreshProgress = function RefreshProgress(props) {
 
   return React.createElement(
     'div',
-    { className: 'edit' + game.name.replace(/\s/g, "SPACE") + 'Progress progressDiv' },
+    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv' },
     React.createElement(
       'h3',
       { className: 'gameProgress editLabel progressEditLabel' },
@@ -220,17 +252,23 @@ var GameList = function GameList(props) {
   };
 
   var gameNodes = props.games.map(function (game) {
-    var classes = 'game ' + game.name.replace(/\s/g, "SPACE"); //to set mutliple classes since `` quotes apparently don't like className
-
+    var classes = 'game ' + game.name.replace(/\s|:|-|'/g, "QZ"); //to set mutliple classes since `` quotes apparently don't like className
+    console.dir(game);
     return React.createElement(
       'div',
       { key: game._id, className: classes, onClick: function onClick() {
           testDivClick(game);
         } },
+      game.cover && React.createElement('img', { src: game.cover }),
+      !game.cover && React.createElement(
+        'h3',
+        { className: 'imgAlt' },
+        'No Image'
+      ),
       React.createElement(
         'h3',
         { className: 'gameName' },
-        ' Name: ',
+        ' ',
         game.name,
         ' '
       ),
@@ -250,7 +288,7 @@ var GameList = function GameList(props) {
       ),
       React.createElement(
         'form',
-        { className: 'delete' + game.name.replace(/\s/g, "SPACE"), onSubmit: function onSubmit(e) {
+        { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
             return deleteGame(e, game.name);
           } },
         React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
@@ -259,7 +297,7 @@ var GameList = function GameList(props) {
       ),
       React.createElement(
         'form',
-        { className: 'edit' + game.name.replace(/\s/g, "SPACE"), onSubmit: function onSubmit(e) {
+        { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
             return editGame(e, game);
           } },
         React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
@@ -277,11 +315,11 @@ var GameList = function GameList(props) {
 };
 
 var testDivClick = function testDivClick(game) {
-  var div = $('.' + game.name.replace(/\s/g, "SPACE"));
+  var div = $('.' + game.name.replace(/\s|:|-|'/g, "QZ"));
 
   if (div.css('height') != '200px') {
     div.animate({ height: '200' }, 300);
-  } else if (!editMode[game.name.replace(/\s/g, "SPACE")]) {
+  } else if (!editMode[game.name.replace(/\s|:|-|'/g, "QZ")]) {
     div.animate({ height: '75' }, 300);
   }
 };
@@ -290,9 +328,9 @@ var testDivClick = function testDivClick(game) {
 var GameEditMode = function GameEditMode(props) {
   //one copy for editing and a separate copy to revert back to on cancel
   var game = props.game;
-  editMode[game.name.replace(/\s/g, "SPACE")] = true;
+  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = true;
 
-  $('.' + game.name.replace(/\s/g, "SPACE")).animate({ height: '200' }, 300);
+  $('.' + game.name.replace(/\s|:|-|'/g, "QZ")).animate({ height: '200' }, 300);
 
   var oldGame = {
     name: game.name,
@@ -301,20 +339,25 @@ var GameEditMode = function GameEditMode(props) {
   };
   return React.createElement(
     'form',
-    { className: 'edit' + game.name.replace(/\s/g, "SPACE") + ' editForm', onSubmit: function onSubmit(e) {
+    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + ' editForm', onSubmit: function onSubmit(e) {
         return submitEdit(e, game, oldGame);
       } },
     React.createElement(
       'div',
       null,
+      game.cover && React.createElement('img', { src: game.cover }),
+      !game.cover && React.createElement(
+        'h3',
+        { className: 'imgAlt' },
+        'No Image'
+      ),
       React.createElement(
         'h3',
-        { className: 'gameName editLabel' },
-        ' Name:'
-      ),
-      React.createElement('input', { className: 'editInput', name: 'name', type: 'text', value: game.name, onChange: function onChange(e) {
-          return onInputChange(e.target.value, game, 'name');
-        } })
+        { className: 'gameName' },
+        ' ',
+        game.name,
+        ' '
+      )
     ),
     React.createElement(
       'div',
@@ -389,7 +432,7 @@ var GameEditMode = function GameEditMode(props) {
     React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name }),
     React.createElement(
       'div',
-      { className: 'edit' + game.name.replace(/\s/g, "SPACE") + 'Progress progressDiv' },
+      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv' },
       React.createElement(
         'h3',
         { className: 'gameProgress editLabel progressEditLabel' },
@@ -406,15 +449,21 @@ var GameEditMode = function GameEditMode(props) {
 //switches the game back to read only mode
 var GameReadMode = function GameReadMode(props) {
   var game = props.game;
-  editMode[game.name.replace(/\s/g, "SPACE")] = false;
+  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = false;
 
   return React.createElement(
     'div',
     null,
+    game.cover && React.createElement('img', { src: game.cover }),
+    !game.cover && React.createElement(
+      'h3',
+      { className: 'imgAlt' },
+      'No Image'
+    ),
     React.createElement(
       'h3',
       { className: 'gameName' },
-      ' Name: ',
+      ' ',
       game.name,
       ' '
     ),
@@ -434,7 +483,7 @@ var GameReadMode = function GameReadMode(props) {
     ),
     React.createElement(
       'form',
-      { className: 'delete' + game.name.replace(/\s/g, "SPACE"), onSubmit: function onSubmit(e) {
+      { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
           return deleteGame(e, game.name);
         } },
       React.createElement('input', { className: 'deleteGame', type: 'submit', value: 'Delete' }),
@@ -443,7 +492,7 @@ var GameReadMode = function GameReadMode(props) {
     ),
     React.createElement(
       'form',
-      { className: 'edit' + game.name.replace(/\s/g, "SPACE"), onSubmit: function onSubmit(e) {
+      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
           return editGame(e, game);
         } },
       React.createElement('input', { className: 'editGame', type: 'submit', value: 'Edit' }),
@@ -464,10 +513,6 @@ var setup = function setup(csrf) {
   ReactDOM.render(React.createElement(GameForm, { csrf: csrf }), document.querySelector('#addGame'));
 
   ReactDOM.render(React.createElement(GameList, { games: [] }), document.querySelector('#games'));
-
-  $('#gameName').autocomplete({
-    source: ['test', 'test2', 'random', 'randomtest']
-  });
 
   loadGamesFromServer();
 };

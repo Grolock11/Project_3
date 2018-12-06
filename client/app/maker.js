@@ -22,7 +22,7 @@ const handleGame = (e) => {
 const deleteGame = (e, name) => {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $(`.delete${name.replace(/\s/g, "SPACE")}`).serialize(), () => {
+  sendAjax('DELETE', '/game', $(`.delete${name.replace(/\s|:|-|'/g, "QZ")}`).serialize(), () => {
     loadGamesFromServer();
   });
 
@@ -35,7 +35,7 @@ const editGame = (e, game) => {
 
   ReactDOM.render(
     <GameEditMode game={game} />,
-    document.querySelector(`.${game.name.replace(/\s/g, "SPACE")}`)
+    document.querySelector(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`)
   );
 
   return false;
@@ -47,7 +47,7 @@ const cancelEdit = (e, game) => {
 
   ReactDOM.render(
     <GameReadMode game={game} />,
-    document.querySelector(`.${game.name.replace(/\s/g, "SPACE")}`)
+    document.querySelector(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`)
   );
 
   return false;
@@ -57,10 +57,10 @@ const cancelEdit = (e, game) => {
 const submitEdit = (e, game, oldGame) => {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $(`.edit${oldGame.name.replace(/\s/g, "SPACE")}`).serialize(), () => {
+  sendAjax('POST', '/editGame', $(`.edit${oldGame.name.replace(/\s|:|-|'/g, "QZ")}`).serialize(), () => {
     ReactDOM.render(
       <GameReadMode game={game} />,
-      document.querySelector(`.${oldGame.name.replace(/\s/g, "SPACE")}`)
+      document.querySelector(`.${oldGame.name.replace(/\s|:|-|'/g, "QZ")}`)
     );
 
     loadGamesFromServer();
@@ -71,9 +71,41 @@ const submitEdit = (e, game, oldGame) => {
 
 //populate autocomplete based on user search
 const searchGames = (currentSearch) => {
-  // $('#gameName').autocomplete({
-  //   source: ['currentSearch'],
-  // });
+
+  //reset underlying value for game image so it doesn't save the wrong one
+  $('#gameCover').val('');
+
+  sendAjax('POST', '/searchGames', $('#gameForm').serialize(), (response) => {
+    let games = response.games.body;
+    console.dir(response.games.body);
+
+    if(games.length) {
+      const gameNames = games.map((game) => {
+        return game.name;
+      })
+
+      //set the autocomplete to show the games found from the search
+      $('#gameName').autocomplete({
+        source: gameNames,
+        select: function (event, ui) {
+          let selected = games.filter((game) => {
+            return game.name == ui.item.value;
+          })
+
+          console.dir(ui.item.value);
+          console.dir(selected);
+
+          //Set the image for the game if it has one
+          if(selected[0].cover) {
+            $('#gameCover').val(selected[0].cover.url);
+          }
+          else {
+            $('#gameCover').val('');
+          }
+        }
+      });
+    }
+  })
 }
 
 //using a comment attribute temporarily in react to store comments inline
@@ -99,6 +131,7 @@ const GameForm = (props) => {
         </div>
       </div>
       <input id='csrf' type="hidden" name="_csrf" value={props.csrf} />
+      <input id='gameCover' type="hidden" name="cover" value='' />
       <input className="gameSubmit" type="submit" value="Submit" />
     </form>
   );
@@ -146,10 +179,10 @@ const statusChange = () => {
 const editStatusChange = (value, game) => {
   game.status = value;
 
-  if($(`.edit${game.name.replace(/\s/g, "SPACE")}Progress`).length) {
+  if($(`.edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress`).length) {
     ReactDOM.render(
       <RefreshProgress game={game}/>,
-      document.querySelector(`.edit${game.name.replace(/\s/g, "SPACE")}Progress`)
+      document.querySelector(`.edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress`)
     );
   }
 }
@@ -159,7 +192,7 @@ const RefreshProgress = (props) => {
   const game = props.game;
 
   return(
-    <div className={`edit${game.name.replace(/\s/g, "SPACE")}Progress progressDiv`}>
+    <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
       <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
       {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
     </div>
@@ -185,19 +218,21 @@ const GameList = (props) => {
   };
 
   const gameNodes = props.games.map(function(game) {
-    let classes = `game ${game.name.replace(/\s/g, "SPACE")}`; //to set mutliple classes since `` quotes apparently don't like className
-
+    let classes = `game ${game.name.replace(/\s|:|-|'/g, "QZ")}`; //to set mutliple classes since `` quotes apparently don't like className
+    console.dir(game);
     return (
       <div key={game._id} className={classes} onClick={() => {testDivClick(game)}} >
-        <h3 className="gameName"> Name: {game.name} </h3>
+        {game.cover && <img src={game.cover} />}
+        {!game.cover && <h3 className='imgAlt'>No Image</h3>}
+        <h3 className="gameName"> {game.name} </h3>
         <h3 className="gameStatus"> Status: {game.status} </h3>
         <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
-        <form className={`delete${game.name.replace(/\s/g, "SPACE")}`} onSubmit={(e) => deleteGame(e, game.name)} >
+        <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
           <input className="deleteGame" type='submit' value='Delete'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
         </form>
-        <form className={`edit${game.name.replace(/\s/g, "SPACE")}`} onSubmit={(e) => editGame(e, game)} >
+        <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
           <input className="editGame" type='submit' value='Edit'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
@@ -214,12 +249,12 @@ const GameList = (props) => {
 };
 
 const testDivClick = (game) => {
-  const div = $(`.${game.name.replace(/\s/g, "SPACE")}`);
+  const div = $(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`);
 
   if (div.css('height') != '200px') {
     div.animate({height: '200'}, 300);
   }
-  else if (!editMode[game.name.replace(/\s/g, "SPACE")]) {
+  else if (!editMode[game.name.replace(/\s|:|-|'/g, "QZ")]) {
     div.animate({height: '75'}, 300);
   }
 }
@@ -228,9 +263,9 @@ const testDivClick = (game) => {
 const GameEditMode = (props) => {
   //one copy for editing and a separate copy to revert back to on cancel
   const game = props.game;
-  editMode[game.name.replace(/\s/g, "SPACE")] = true;
+  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = true;
 
-  $(`.${game.name.replace(/\s/g, "SPACE")}`).animate({height: '200'}, 300);
+  $(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`).animate({height: '200'}, 300);
 
   const oldGame = {
     name: game.name,
@@ -238,9 +273,11 @@ const GameEditMode = (props) => {
     status: game.status,
   };
   return (
-    <form className={`edit${game.name.replace(/\s/g, "SPACE")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
+    <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
     <div>
-      <h3 className="gameName editLabel"> Name:</h3><input className='editInput' name="name" type='text' value={game.name} onChange={(e) => onInputChange(e.target.value, game, 'name')} />
+    {game.cover && <img src={game.cover} />}
+    {!game.cover && <h3 className='imgAlt'>No Image</h3>}
+    <h3 className="gameName"> {game.name} </h3>
     </div>
     <div className='editStatusDiv'>
       <h3 className="gameStatus editLabel"> Status:</h3><select id="gameStatus" className='editInput' name='status' onChange={(e) => {editStatusChange(e.target.value, game)}} >
@@ -260,7 +297,7 @@ const GameEditMode = (props) => {
       <input className="editGame" type='submit' value='Submit'/>
       <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
       <input type="hidden" name="gameName" value={game.name} />
-      <div className={`edit${game.name.replace(/\s/g, "SPACE")}Progress progressDiv`}>
+      <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv`}>
         <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
         {checkStatus(game.status) && <input className='editInput progressInput' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
       </div>
@@ -271,19 +308,21 @@ const GameEditMode = (props) => {
 //switches the game back to read only mode
 const GameReadMode = (props) => {
   const game = props.game;
-  editMode[game.name.replace(/\s/g, "SPACE")] = false;
+  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = false;
 
   return (
     <div>
-      <h3 className="gameName"> Name: {game.name} </h3>
+    {game.cover && <img src={game.cover} />}
+    {!game.cover && <h3 className='imgAlt'>No Image</h3>}
+    <h3 className="gameName"> {game.name} </h3>
       <h3 className="gameStatus"> Status: {game.status} </h3>
       <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
-      <form className={`delete${game.name.replace(/\s/g, "SPACE")}`} onSubmit={(e) => deleteGame(e, game.name)} >
+      <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
         <input className="deleteGame" type='submit' value='Delete'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
       </form>
-      <form className={`edit${game.name.replace(/\s/g, "SPACE")}`} onSubmit={(e) => editGame(e, game)} >
+      <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
         <input className="editGame" type='submit' value='Edit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
@@ -312,10 +351,6 @@ const setup = function(csrf) {
     <GameList games={[]} />,
     document.querySelector('#games')
   );
-
-  $('#gameName').autocomplete({
-    source: ['test', 'test2', 'random', 'randomtest'],
-  });
 
   loadGamesFromServer();
 };

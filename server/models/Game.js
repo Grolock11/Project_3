@@ -30,12 +30,16 @@ const GameSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  cover: {
+    type: String,
+  }
 });
 
 GameSchema.statics.toAPI = (doc) => ({
   name: doc.name,
   status: doc.status,
   progress: doc.progress,
+  cover: doc.cover,
 });
 
 GameSchema.statics.findByOwner = (ownerId, callback) => {
@@ -43,7 +47,7 @@ GameSchema.statics.findByOwner = (ownerId, callback) => {
     owner: convertId(ownerId),
   };
 
-  return GameModel.find(search).select('name status progress').exec(callback);
+  return GameModel.find(search).select('name status progress cover').exec(callback);
 };
 
 GameModel = mongoose.model('Game', GameSchema);
