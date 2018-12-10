@@ -30,7 +30,6 @@ nav:nth-child(1) {
     padding: 0 2px !important;
     margin-top: 6px !important;
     margin-left: 20px !important;
-    font-size: 1.3em;
     float: left;
 }
 
@@ -49,7 +48,7 @@ nav:nth-child(1) {
     position: absolute;
     top: 50px;
     border-top: 2px solid #65a293;
-    height: 87px;
+    height: 100px;
     width: 300px;
     margin-top:0px;
     padding-top:10px;
@@ -68,13 +67,6 @@ nav:nth-child(1) {
 
 .gameForm input[type=text] {
     float:left;
-}
-
-.gameSubmit {
-    display: inline;
-    margin-top: 10px;
-    width: 250px;
-    margin-left: 20px;
 }
 
 .mainForm {
@@ -102,7 +94,7 @@ nav:nth-child(1) {
     text-align: center;
     margin: 0 auto;
     margin-top: 14px;
-    font-size: 1.2em;
+    font-size: .95em;
     width: 100px;
     padding: 3px 0px;
     text-decoration: none;
@@ -305,7 +297,7 @@ h3.gameProgress {
 
 .formButtons input {
   margin-left: 25px;
-  width: 150px;
+  min-width: 150px;
 }
 
 #gamesTitle {
@@ -410,9 +402,38 @@ img {
   border-radius: 10px !important;
 }
 
-.mdl-textfield__input {
+.greenBack .mdl-textfield__input {
   width: 25% !important;
   margin-top: 25px !important;
   border-color: white !important;
 }
 
+.mdl-textfield__input {
+  border-color: #65a293 !important;
+  width: 100% !important;
+  margin-top: 0 !important;
+}
+
+#loginForm .mdl-textfield__input, #signupForm .mdl-textfield__input {
+  width: 65% !important;
+  display: inline-block !important;
+}
+
+#gameForm .mdl-textfield__input {
+  border-color: #white !important;
+}
+
+#gameForm .mdl-textfield__input::placeholder {
+  color: #d8d8d8;
+}
+
+.gameSubmit {
+    display: inline;
+    margin-top: 10px !important;
+    width: 250px;
+    margin-left: 20px !important;
+}
+
+.progressLabel {
+  padding-top: 5px;
+}

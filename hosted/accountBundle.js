@@ -33,40 +33,40 @@ var PasswordChangeForm = function PasswordChangeForm(props) {
     { id: 'passwordChangeForm', name: 'passwordChangeForm', onSubmit: handlePasswordChange, action: '/changePass', method: 'POST' },
     React.createElement(
       'div',
-      null,
+      { className: 'mdl-textfield mdl-js-textfield' },
       React.createElement(
         'label',
         { htlmlFor: 'currentPass' },
         'Current Password: '
       ),
-      React.createElement('input', { id: 'currentPass', type: 'password', name: 'currentPass', placeholder: 'current password' })
+      React.createElement('input', { id: 'currentPass', className: 'mdl-textfield__input', type: 'password', name: 'currentPass', placeholder: 'current password' })
     ),
     React.createElement(
       'div',
-      null,
+      { className: 'mdl-textfield mdl-js-textfield' },
       React.createElement(
         'label',
         { htmlFor: 'pass' },
         'New Password: '
       ),
-      React.createElement('input', { id: 'pass', type: 'password', name: 'pass', placeholder: 'new password' })
+      React.createElement('input', { id: 'pass', className: 'mdl-textfield__input', type: 'password', name: 'pass', placeholder: 'new password' })
     ),
     React.createElement(
       'div',
-      null,
+      { className: 'mdl-textfield mdl-js-textfield' },
       React.createElement(
         'label',
         { htmlFor: 'pass2' },
         'Retype New Password: '
       ),
-      React.createElement('input', { id: 'pass2', type: 'password', name: 'pass2', placeholder: 'retype password' })
+      React.createElement('input', { id: 'pass2', className: 'mdl-textfield__input', type: 'password', name: 'pass2', placeholder: 'retype password' })
     ),
     React.createElement('input', { type: 'hidden', name: '_csrf', value: props.csrf }),
     React.createElement(
       'section',
       { className: 'formButtons' },
-      React.createElement('input', { className: 'passwordCancel', type: 'button', value: 'Cancel', onClick: cancelPasswordChange }),
-      React.createElement('input', { className: 'passwordSubmit', type: 'submit', value: 'Change Password' })
+      React.createElement('input', { className: 'passwordCancel mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'button', value: 'Cancel', onClick: cancelPasswordChange }),
+      React.createElement('input', { className: 'passwordSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Change Password' })
     )
   );
 };
@@ -74,7 +74,7 @@ var PasswordChangeForm = function PasswordChangeForm(props) {
 var CancelPasswordChange = function CancelPasswordChange(props) {
   return React.createElement(
     'button',
-    { id: 'passwordChangeButton' },
+    { id: 'passwordChangeButton', className: 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored' },
     'Change Password'
   );
 };

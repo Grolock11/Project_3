@@ -29,23 +29,23 @@ const PasswordChangeForm = (props) => {
   return (
     <form id='passwordChangeForm' name='passwordChangeForm' onSubmit={handlePasswordChange} action='/changePass' method='POST' >
 
-        <div>
+        <div className='mdl-textfield mdl-js-textfield'>
           <label htlmlFor='currentPass'>Current Password: </label>
-          <input id='currentPass' type='password' name='currentPass' placeholder='current password' />
+          <input id='currentPass'className='mdl-textfield__input' type='password' name='currentPass' placeholder='current password' />
         </div>
-        <div>
+        <div className='mdl-textfield mdl-js-textfield'>
           <label htmlFor='pass'>New Password: </label>
-          <input id='pass' type='password' name='pass' placeholder='new password' />
+          <input id='pass' className='mdl-textfield__input' type='password' name='pass' placeholder='new password' />
         </div>
-        <div>
+        <div className='mdl-textfield mdl-js-textfield'>
           <label htmlFor='pass2'>Retype New Password: </label>
-          <input id='pass2' type='password' name='pass2' placeholder='retype password' />
+          <input id='pass2' className='mdl-textfield__input' type='password' name='pass2' placeholder='retype password' />
         </div>
 
       <input type='hidden' name='_csrf' value={props.csrf} />
       <section className='formButtons'>
-        <input className='passwordCancel' type='button' value='Cancel' onClick={cancelPasswordChange} />
-        <input className='passwordSubmit' type='submit' value='Change Password' />
+        <input className='passwordCancel mdl-button mdl-js-button mdl-button--raised mdl-button--colored' type='button' value='Cancel' onClick={cancelPasswordChange} />
+        <input className='passwordSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored' type='submit' value='Change Password' />
       </section>
     </form>
   );
@@ -53,7 +53,7 @@ const PasswordChangeForm = (props) => {
 
 const CancelPasswordChange = (props) => {
   return (
-      <button id='passwordChangeButton'>Change Password</button>
+      <button id='passwordChangeButton' className='mdl-button mdl-js-button mdl-button--raised mdl-button--colored'>Change Password</button>
   )
 };
 

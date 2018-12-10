@@ -39,11 +39,11 @@ const LoginWindow = (props) => {
   return (
     <form id='loginForm' name='loginForm' onSubmit={handleLogin} action='/login' method='POST' className='mainForm' >
       <label htlmlFor='username'>Username: </label>
-      <input id='user' type='text' name='username' placeholder='username' />
+      <input id='user' className='mdl-textfield__input' type='text' name='username' placeholder='username' />
       <label htmlFor='pass'>Password: </label>
-      <input id='pass' type='password' name='pass' placeholder='password' />
+      <input id='pass' className='mdl-textfield__input' type='password' name='pass' placeholder='password' />
       <input type='hidden' name='_csrf' value={props.csrf} />
-      <input className='formSubmit' type='submit' value='Sign in' />
+      <input className='formSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored' type='submit' value='Sign in' />
     </form>
   );
 };
@@ -52,13 +52,13 @@ const SignupWindow = (props) => {
   return (
     <form id='signupForm' name='signupForm' onSubmit={handleSignup} action='/signup' method='POST' className='mainForm' >
       <label htlmlFor='username'>Username: </label>
-      <input id='user' type='text' name='username' placeholder='username' />
+      <input id='user' className='mdl-textfield__input' type='text' name='username' placeholder='username' />
       <label htmlFor='pass'>Password: </label>
-      <input id='pass' type='password' name='pass' placeholder='password' />
+      <input id='pass' className='mdl-textfield__input' type='password' name='pass' placeholder='password' />
       <label htmlFor='pass2'>Password: </label>
-      <input id='pass2' type='password' name='pass2' placeholder='retype password' />
+      <input id='pass2' className='mdl-textfield__input' type='password' name='pass2' placeholder='retype password' />
       <input type='hidden' name='_csrf' value={props.csrf} />
-      <input className='formSubmit' type='submit' value='Sign Up' />
+      <input className='formSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored' type='submit' value='Sign Up' />
     </form>
   );
 };

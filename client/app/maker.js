@@ -115,7 +115,7 @@ const GameForm = (props) => {
       <div id="gameFormInputs">
         <div>
           <label htmlFor="gameName">Game: </label>
-          <input id="gameName" type="text" name="name" placeholder="Game Name" onChange={(e) => searchGames(e.target.value)} />
+          <input id="gameName" className='mdl-textfield__input' type="text" name="name" placeholder="Game Name" onChange={(e) => searchGames(e.target.value)} />
         </div>
         <div>
           <label htmlFor="gameStatus">Status: </label>
@@ -132,7 +132,7 @@ const GameForm = (props) => {
       </div>
       <input id='csrf' type="hidden" name="_csrf" value={props.csrf} />
       <input id='gameCover' type="hidden" name="cover" value='' />
-      <input className="gameSubmit" type="submit" value="Submit" />
+      <input className="gameSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type="submit" value="Submit" />
     </form>
   );
 };
@@ -141,8 +141,8 @@ const GameForm = (props) => {
 const DisplayProgress = (props) => {
   return (
     <div>
-      <label htmlFor="progress">Progress: </label>
-      <input id="progress" type="text" name="progress" placeholder="Current Progress" />
+      <label htmlFor="progress" className='progressLabel'>Progress: </label>
+      <input id="progress" type="text" className='mdl-textfield__input' name="progress" placeholder="Current Progress" />
     </div>
   )
 }
@@ -163,7 +163,7 @@ const statusChange = () => {
       document.querySelector('#progressArea')
     );
 
-    $('#gameForm').animate({height: '110'}, 50)
+    $('#gameForm').animate({height: '130'}, 50)
   }
   else {
     ReactDOM.render(
@@ -171,7 +171,7 @@ const statusChange = () => {
       document.querySelector('#progressArea')
     )
 
-    $('#gameForm').animate({height: '87'}, 50)
+    $('#gameForm').animate({height: '100'}, 50)
   }
 }
 
@@ -296,7 +296,7 @@ const GameEditMode = (props) => {
         <input className="editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Submit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
-        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv mdl-textfield mdl-js-textfield`}>
+        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv greenBack mdl-textfield mdl-js-textfield`}>
           <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
           {checkStatus(game.status) && <input className='editInput progressInput mdl-textfield__input' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
         </div>

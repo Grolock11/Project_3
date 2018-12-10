@@ -32,7 +32,7 @@ const GameSchema = new mongoose.Schema({
   },
   cover: {
     type: String,
-  }
+  },
 });
 
 GameSchema.statics.toAPI = (doc) => ({

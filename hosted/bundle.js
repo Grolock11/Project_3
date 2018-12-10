@@ -116,7 +116,7 @@ var GameForm = function GameForm(props) {
           { htmlFor: 'gameName' },
           'Game: '
         ),
-        React.createElement('input', { id: 'gameName', type: 'text', name: 'name', placeholder: 'Game Name', onChange: function onChange(e) {
+        React.createElement('input', { id: 'gameName', className: 'mdl-textfield__input', type: 'text', name: 'name', placeholder: 'Game Name', onChange: function onChange(e) {
             return searchGames(e.target.value);
           } })
       ),
@@ -162,7 +162,7 @@ var GameForm = function GameForm(props) {
     ),
     React.createElement('input', { id: 'csrf', type: 'hidden', name: '_csrf', value: props.csrf }),
     React.createElement('input', { id: 'gameCover', type: 'hidden', name: 'cover', value: '' }),
-    React.createElement('input', { className: 'gameSubmit', type: 'submit', value: 'Submit' })
+    React.createElement('input', { className: 'gameSubmit mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Submit' })
   );
 };
 
@@ -173,10 +173,10 @@ var DisplayProgress = function DisplayProgress(props) {
     null,
     React.createElement(
       'label',
-      { htmlFor: 'progress' },
+      { htmlFor: 'progress', className: 'progressLabel' },
       'Progress: '
     ),
-    React.createElement('input', { id: 'progress', type: 'text', name: 'progress', placeholder: 'Current Progress' })
+    React.createElement('input', { id: 'progress', type: 'text', className: 'mdl-textfield__input', name: 'progress', placeholder: 'Current Progress' })
   );
 };
 
@@ -193,11 +193,11 @@ var statusChange = function statusChange() {
   if (checkStatus(value)) {
     ReactDOM.render(React.createElement(DisplayProgress, null), document.querySelector('#progressArea'));
 
-    $('#gameForm').animate({ height: '110' }, 50);
+    $('#gameForm').animate({ height: '130' }, 50);
   } else {
     ReactDOM.render(React.createElement(HideProgress, null), document.querySelector('#progressArea'));
 
-    $('#gameForm').animate({ height: '87' }, 50);
+    $('#gameForm').animate({ height: '100' }, 50);
   }
 };
 
@@ -429,7 +429,7 @@ var GameEditMode = function GameEditMode(props) {
     React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name }),
     React.createElement(
       'div',
-      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv mdl-textfield mdl-js-textfield' },
+      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv greenBack mdl-textfield mdl-js-textfield' },
       React.createElement(
         'h3',
         { className: 'gameProgress editLabel progressEditLabel' },

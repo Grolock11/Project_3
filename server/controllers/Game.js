@@ -37,7 +37,7 @@ const makeGame = (req, res) => {
     status: req.body.status,
     owner: req.session.account._id,
     progress: req.body.progress,
-    cover: req.body.cover
+    cover: req.body.cover,
   };
 
   // If the game already exists, update the data instead.
