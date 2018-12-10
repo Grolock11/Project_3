@@ -2,7 +2,7 @@ const models = require('../models');
 const igbd = require('igdb-api-node').default;
 
 const Game = models.Game;
-const igbdKey = process.env.igbd || '7d5dde2197753afed047fb704b503de4';
+const igbdKey = process.env.IGBD;
 
 const gamePage = (req, res) => {
   Game.GameModel.findByOwner(req.session.account._id, (err, docs) => {
