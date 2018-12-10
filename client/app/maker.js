@@ -22,7 +22,7 @@ const handleGame = (e) => {
 const deleteGame = (e, name) => {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $(`.delete${name.replace(/\s|:|-|'/g, "QZ")}`).serialize(), () => {
+  sendAjax('DELETE', '/game', $(`.delete${name.replace(/\s|:|-|'|./g, "QZ")}`).serialize(), () => {
     loadGamesFromServer();
   });
 
@@ -35,7 +35,7 @@ const editGame = (e, game) => {
 
   ReactDOM.render(
     <GameEditMode game={game} />,
-    document.querySelector(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`)
+    document.querySelector(`.${game.name.replace(/\s|:|-|'|./g, "QZ")}`)
   );
 
   return false;
@@ -47,7 +47,7 @@ const cancelEdit = (e, game) => {
 
   ReactDOM.render(
     <GameReadMode game={game} />,
-    document.querySelector(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`)
+    document.querySelector(`.${game.name.replace(/\s|:|-|'|./g, "QZ")}`)
   );
 
   return false;
@@ -57,10 +57,10 @@ const cancelEdit = (e, game) => {
 const submitEdit = (e, game, oldGame) => {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $(`.edit${oldGame.name.replace(/\s|:|-|'/g, "QZ")}`).serialize(), () => {
+  sendAjax('POST', '/editGame', $(`.edit${oldGame.name.replace(/\s|:|-|'|./g, "QZ")}`).serialize(), () => {
     ReactDOM.render(
       <GameReadMode game={game} />,
-      document.querySelector(`.${oldGame.name.replace(/\s|:|-|'/g, "QZ")}`)
+      document.querySelector(`.${oldGame.name.replace(/\s|:|-|'|./g, "QZ")}`)
     );
 
     loadGamesFromServer();
@@ -184,10 +184,10 @@ const statusChange = () => {
 const editStatusChange = (value, game) => {
   game.status = value;
 
-  if($(`.edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress`).length) {
+  if($(`.edit${game.name.replace(/\s|:|-|'|./g, "QZ")}Progress`).length) {
     ReactDOM.render(
       <RefreshProgress game={game}/>,
-      document.querySelector(`.edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress`)
+      document.querySelector(`.edit${game.name.replace(/\s|:|-|'|./g, "QZ")}Progress`)
     );
   }
 }
@@ -197,7 +197,7 @@ const RefreshProgress = (props) => {
   const game = props.game;
 
   return(
-    <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv mdl-textfield mdl-js-textfield`}>
+    <div className={`edit${game.name.replace(/\s|:|-|'|./g, "QZ")}Progress progressDiv mdl-textfield mdl-js-textfield`}>
       <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
       {checkStatus(game.status) && <input className='editInput progressInput mdl-textfield__input' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
     </div>
@@ -223,7 +223,7 @@ const GameList = (props) => {
   };
 
   const gameNodes = props.games.map(function(game) {
-    let classes = `game ${game.name.replace(/\s|:|-|'/g, "QZ")}`; //to set mutliple classes since `` quotes apparently don't like className
+    let classes = `game ${game.name.replace(/\s|:|-|'|./g, "QZ")}`; //to set mutliple classes since `` quotes apparently don't like className
     console.dir(game);
     return (
       <div key={game._id} className={classes} onClick={() => {testDivClick(game)}} >
@@ -232,12 +232,12 @@ const GameList = (props) => {
         <h3 className="gameName"> {game.name} </h3>
         <h3 className="gameStatus"> Status: {game.status} </h3>
         <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
-        <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
+        <form className={`delete${game.name.replace(/\s|:|-|'|./g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
           <input className="deleteGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Delete'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
         </form>
-        <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
+        <form className={`edit${game.name.replace(/\s|:|-|'|./g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
           <input className="editGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Edit'/>
           <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
           <input type="hidden" name="gameName" value={game.name} />
@@ -254,12 +254,12 @@ const GameList = (props) => {
 };
 
 const testDivClick = (game) => {
-  const div = $(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`);
+  const div = $(`.${game.name.replace(/\s|:|-|'|./g, "QZ")}`);
 
   if (div.css('height') != '200px') {
     div.animate({height: '200'}, 300);
   }
-  else if (!editMode[game.name.replace(/\s|:|-|'/g, "QZ")]) {
+  else if (!editMode[game.name.replace(/\s|:|-|'|./g, "QZ")]) {
     div.animate({height: '75'}, 300);
   }
 }
@@ -268,9 +268,9 @@ const testDivClick = (game) => {
 const GameEditMode = (props) => {
   //one copy for editing and a separate copy to revert back to on cancel
   const game = props.game;
-  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = true;
+  editMode[game.name.replace(/\s|:|-|'|./g, "QZ")] = true;
 
-  $(`.${game.name.replace(/\s|:|-|'/g, "QZ")}`).animate({height: '200'}, 300);
+  $(`.${game.name.replace(/\s|:|-|'|./g, "QZ")}`).animate({height: '200'}, 300);
 
   const oldGame = {
     name: game.name,
@@ -279,7 +279,7 @@ const GameEditMode = (props) => {
     cover: game.cover,
   };
   return (
-    <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
+    <form className={`edit${game.name.replace(/\s|:|-|'|./g, "QZ")} editForm`} onSubmit={(e) => submitEdit(e, game, oldGame)} >
       {game.cover && <img src={game.cover} />}
       {!game.cover && <h3 className='imgAlt'>No Image</h3>}
       <h3 className="gameName"> {game.name} </h3>
@@ -301,7 +301,7 @@ const GameEditMode = (props) => {
         <input className="editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Submit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
-        <div className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}Progress progressDiv greenBack mdl-textfield mdl-js-textfield`}>
+        <div className={`edit${game.name.replace(/\s|:|-|'|./g, "QZ")}Progress progressDiv greenBack mdl-textfield mdl-js-textfield`}>
           <h3 className="gameProgress editLabel progressEditLabel" >Progress: {!checkStatus(game.status) && 'N/A' }</h3>
           {checkStatus(game.status) && <input className='editInput progressInput mdl-textfield__input' name="progress" type='text' value={game.progress} onChange={(e) => onInputChange(e.target.value, game, 'progress')} /> }
         </div>
@@ -312,7 +312,7 @@ const GameEditMode = (props) => {
 //switches the game back to read only mode
 const GameReadMode = (props) => {
   const game = props.game;
-  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = false;
+  editMode[game.name.replace(/\s|:|-|'|./g, "QZ")] = false;
 
   return (
     <div>
@@ -321,12 +321,12 @@ const GameReadMode = (props) => {
     <h3 className="gameName"> {game.name} </h3>
       <h3 className="gameStatus"> Status: {game.status} </h3>
       <h3 className="gameProgress"> Progress: {game.progress || 'N/A'} </h3>
-      <form className={`delete${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
+      <form className={`delete${game.name.replace(/\s|:|-|'|./g, "QZ")}`} onSubmit={(e) => deleteGame(e, game.name)} >
         <input className="deleteGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Delete'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />
       </form>
-      <form className={`edit${game.name.replace(/\s|:|-|'/g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
+      <form className={`edit${game.name.replace(/\s|:|-|'|./g, "QZ")}`} onSubmit={(e) => editGame(e, game)} >
         <input className="editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored" type='submit' value='Edit'/>
         <input id='csrf' type="hidden" name="_csrf" value={$('#csrf').val()} />
         <input type="hidden" name="gameName" value={game.name} />

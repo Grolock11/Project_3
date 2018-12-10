@@ -24,7 +24,7 @@ var handleGame = function handleGame(e) {
 var deleteGame = function deleteGame(e, name) {
   e.preventDefault();
 
-  sendAjax('DELETE', '/game', $('.delete' + name.replace(/\s|:|-|'/g, "QZ")).serialize(), function () {
+  sendAjax('DELETE', '/game', $('.delete' + name.replace(/\s|:|-|'|./g, "QZ")).serialize(), function () {
     loadGamesFromServer();
   });
 
@@ -35,7 +35,7 @@ var deleteGame = function deleteGame(e, name) {
 var editGame = function editGame(e, game) {
   e.preventDefault();
 
-  ReactDOM.render(React.createElement(GameEditMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'/g, "QZ")));
+  ReactDOM.render(React.createElement(GameEditMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'|./g, "QZ")));
 
   return false;
 };
@@ -44,7 +44,7 @@ var editGame = function editGame(e, game) {
 var cancelEdit = function cancelEdit(e, game) {
   e.preventDefault();
 
-  ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'/g, "QZ")));
+  ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + game.name.replace(/\s|:|-|'|./g, "QZ")));
 
   return false;
 };
@@ -53,8 +53,8 @@ var cancelEdit = function cancelEdit(e, game) {
 var submitEdit = function submitEdit(e, game, oldGame) {
   e.preventDefault();
 
-  sendAjax('POST', '/editGame', $('.edit' + oldGame.name.replace(/\s|:|-|'/g, "QZ")).serialize(), function () {
-    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + oldGame.name.replace(/\s|:|-|'/g, "QZ")));
+  sendAjax('POST', '/editGame', $('.edit' + oldGame.name.replace(/\s|:|-|'|./g, "QZ")).serialize(), function () {
+    ReactDOM.render(React.createElement(GameReadMode, { game: game }), document.querySelector('.' + oldGame.name.replace(/\s|:|-|'|./g, "QZ")));
 
     loadGamesFromServer();
   });
@@ -205,8 +205,8 @@ var statusChange = function statusChange() {
 var editStatusChange = function editStatusChange(value, game) {
   game.status = value;
 
-  if ($('.edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress').length) {
-    ReactDOM.render(React.createElement(RefreshProgress, { game: game }), document.querySelector('.edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress'));
+  if ($('.edit' + game.name.replace(/\s|:|-|'|./g, "QZ") + 'Progress').length) {
+    ReactDOM.render(React.createElement(RefreshProgress, { game: game }), document.querySelector('.edit' + game.name.replace(/\s|:|-|'|./g, "QZ") + 'Progress'));
   }
 };
 
@@ -216,7 +216,7 @@ var RefreshProgress = function RefreshProgress(props) {
 
   return React.createElement(
     'div',
-    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv mdl-textfield mdl-js-textfield' },
+    { className: 'edit' + game.name.replace(/\s|:|-|'|./g, "QZ") + 'Progress progressDiv mdl-textfield mdl-js-textfield' },
     React.createElement(
       'h3',
       { className: 'gameProgress editLabel progressEditLabel' },
@@ -252,7 +252,7 @@ var GameList = function GameList(props) {
   };
 
   var gameNodes = props.games.map(function (game) {
-    var classes = 'game ' + game.name.replace(/\s|:|-|'/g, "QZ"); //to set mutliple classes since `` quotes apparently don't like className
+    var classes = 'game ' + game.name.replace(/\s|:|-|'|./g, "QZ"); //to set mutliple classes since `` quotes apparently don't like className
     console.dir(game);
     return React.createElement(
       'div',
@@ -288,7 +288,7 @@ var GameList = function GameList(props) {
       ),
       React.createElement(
         'form',
-        { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
+        { className: 'delete' + game.name.replace(/\s|:|-|'|./g, "QZ"), onSubmit: function onSubmit(e) {
             return deleteGame(e, game.name);
           } },
         React.createElement('input', { className: 'deleteGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Delete' }),
@@ -297,7 +297,7 @@ var GameList = function GameList(props) {
       ),
       React.createElement(
         'form',
-        { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
+        { className: 'edit' + game.name.replace(/\s|:|-|'|./g, "QZ"), onSubmit: function onSubmit(e) {
             return editGame(e, game);
           } },
         React.createElement('input', { className: 'editGame  mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Edit' }),
@@ -315,11 +315,11 @@ var GameList = function GameList(props) {
 };
 
 var testDivClick = function testDivClick(game) {
-  var div = $('.' + game.name.replace(/\s|:|-|'/g, "QZ"));
+  var div = $('.' + game.name.replace(/\s|:|-|'|./g, "QZ"));
 
   if (div.css('height') != '200px') {
     div.animate({ height: '200' }, 300);
-  } else if (!editMode[game.name.replace(/\s|:|-|'/g, "QZ")]) {
+  } else if (!editMode[game.name.replace(/\s|:|-|'|./g, "QZ")]) {
     div.animate({ height: '75' }, 300);
   }
 };
@@ -328,9 +328,9 @@ var testDivClick = function testDivClick(game) {
 var GameEditMode = function GameEditMode(props) {
   //one copy for editing and a separate copy to revert back to on cancel
   var game = props.game;
-  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = true;
+  editMode[game.name.replace(/\s|:|-|'|./g, "QZ")] = true;
 
-  $('.' + game.name.replace(/\s|:|-|'/g, "QZ")).animate({ height: '200' }, 300);
+  $('.' + game.name.replace(/\s|:|-|'|./g, "QZ")).animate({ height: '200' }, 300);
 
   var oldGame = {
     name: game.name,
@@ -340,7 +340,7 @@ var GameEditMode = function GameEditMode(props) {
   };
   return React.createElement(
     'form',
-    { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + ' editForm', onSubmit: function onSubmit(e) {
+    { className: 'edit' + game.name.replace(/\s|:|-|'|./g, "QZ") + ' editForm', onSubmit: function onSubmit(e) {
         return submitEdit(e, game, oldGame);
       } },
     game.cover && React.createElement('img', { src: game.cover }),
@@ -429,7 +429,7 @@ var GameEditMode = function GameEditMode(props) {
     React.createElement('input', { type: 'hidden', name: 'gameName', value: game.name }),
     React.createElement(
       'div',
-      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ") + 'Progress progressDiv greenBack mdl-textfield mdl-js-textfield' },
+      { className: 'edit' + game.name.replace(/\s|:|-|'|./g, "QZ") + 'Progress progressDiv greenBack mdl-textfield mdl-js-textfield' },
       React.createElement(
         'h3',
         { className: 'gameProgress editLabel progressEditLabel' },
@@ -446,7 +446,7 @@ var GameEditMode = function GameEditMode(props) {
 //switches the game back to read only mode
 var GameReadMode = function GameReadMode(props) {
   var game = props.game;
-  editMode[game.name.replace(/\s|:|-|'/g, "QZ")] = false;
+  editMode[game.name.replace(/\s|:|-|'|./g, "QZ")] = false;
 
   return React.createElement(
     'div',
@@ -480,7 +480,7 @@ var GameReadMode = function GameReadMode(props) {
     ),
     React.createElement(
       'form',
-      { className: 'delete' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
+      { className: 'delete' + game.name.replace(/\s|:|-|'|./g, "QZ"), onSubmit: function onSubmit(e) {
           return deleteGame(e, game.name);
         } },
       React.createElement('input', { className: 'deleteGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Delete' }),
@@ -489,7 +489,7 @@ var GameReadMode = function GameReadMode(props) {
     ),
     React.createElement(
       'form',
-      { className: 'edit' + game.name.replace(/\s|:|-|'/g, "QZ"), onSubmit: function onSubmit(e) {
+      { className: 'edit' + game.name.replace(/\s|:|-|'|./g, "QZ"), onSubmit: function onSubmit(e) {
           return editGame(e, game);
         } },
       React.createElement('input', { className: 'editGame mdl-button mdl-js-button mdl-button--raised mdl-button--colored', type: 'submit', value: 'Edit' }),
