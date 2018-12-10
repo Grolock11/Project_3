@@ -96,8 +96,13 @@ const searchGames = (currentSearch) => {
           console.dir(selected);
 
           //Set the image for the game if it has one
-          if(selected[0].cover) {
-            $('#gameCover').val(selected[0].cover.url);
+          if(selected[0]) {
+            if(selected[0].cover) {
+              $('#gameCover').val(selected[0].cover.url);
+            }
+            else {
+              $('#gameCover').val('');
+            }
           }
           else {
             $('#gameCover').val('');
